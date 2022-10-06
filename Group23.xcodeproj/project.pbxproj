@@ -17,6 +17,11 @@
 		6F22466328EE4D660031385B /* Group23Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F22466228EE4D660031385B /* Group23Tests.swift */; };
 		6F22466D28EE4D660031385B /* Group23UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F22466C28EE4D660031385B /* Group23UITests.swift */; };
 		6F22466F28EE4D660031385B /* Group23UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F22466E28EE4D660031385B /* Group23UITestsLaunchTests.swift */; };
+		6F22467C28EE4FED0031385B /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F22467B28EE4FED0031385B /* HomeVC.swift */; };
+		6F22467E28EE57400031385B /* ScanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F22467D28EE57400031385B /* ScanVC.swift */; };
+		6F22468028EE57DA0031385B /* MergeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F22467F28EE57DA0031385B /* MergeVC.swift */; };
+		6F22468228EE58460031385B /* AnnotateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F22468128EE58460031385B /* AnnotateVC.swift */; };
+		6F22468428EE58740031385B /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F22468328EE58740031385B /* ProfileVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +56,11 @@
 		6F22466828EE4D660031385B /* Group23UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Group23UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F22466C28EE4D660031385B /* Group23UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group23UITests.swift; sourceTree = "<group>"; };
 		6F22466E28EE4D660031385B /* Group23UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group23UITestsLaunchTests.swift; sourceTree = "<group>"; };
+		6F22467B28EE4FED0031385B /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HomeVC.swift; path = pages/HomeVC.swift; sourceTree = "<group>"; };
+		6F22467D28EE57400031385B /* ScanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ScanVC.swift; path = pages/ScanVC.swift; sourceTree = "<group>"; };
+		6F22467F28EE57DA0031385B /* MergeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MergeVC.swift; path = pages/MergeVC.swift; sourceTree = "<group>"; };
+		6F22468128EE58460031385B /* AnnotateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AnnotateVC.swift; path = pages/AnnotateVC.swift; sourceTree = "<group>"; };
+		6F22468328EE58740031385B /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProfileVC.swift; path = pages/ProfileVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,14 +111,19 @@
 		6F22464728EE4D650031385B /* Group23 */ = {
 			isa = PBXGroup;
 			children = (
+				6F22464E28EE4D650031385B /* Main.storyboard */,
+				6F22464C28EE4D650031385B /* ViewController.swift */,
+				6F22467B28EE4FED0031385B /* HomeVC.swift */,
+				6F22467D28EE57400031385B /* ScanVC.swift */,
+				6F22467F28EE57DA0031385B /* MergeVC.swift */,
+				6F22468128EE58460031385B /* AnnotateVC.swift */,
+				6F22468328EE58740031385B /* ProfileVC.swift */,
 				6F22464828EE4D650031385B /* AppDelegate.swift */,
 				6F22464A28EE4D650031385B /* SceneDelegate.swift */,
-				6F22464C28EE4D650031385B /* ViewController.swift */,
-				6F22464E28EE4D650031385B /* Main.storyboard */,
 				6F22465428EE4D650031385B /* Assets.xcassets */,
-				6F22465628EE4D650031385B /* LaunchScreen.storyboard */,
 				6F22465928EE4D650031385B /* Info.plist */,
 				6F22465128EE4D650031385B /* Group23.xcdatamodeld */,
+				6F22465628EE4D650031385B /* LaunchScreen.storyboard */,
 			);
 			path = Group23;
 			sourceTree = "<group>";
@@ -262,9 +277,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F22464D28EE4D650031385B /* ViewController.swift in Sources */,
+				6F22467C28EE4FED0031385B /* HomeVC.swift in Sources */,
+				6F22468028EE57DA0031385B /* MergeVC.swift in Sources */,
+				6F22468428EE58740031385B /* ProfileVC.swift in Sources */,
 				6F22464928EE4D650031385B /* AppDelegate.swift in Sources */,
 				6F22465328EE4D650031385B /* Group23.xcdatamodeld in Sources */,
 				6F22464B28EE4D650031385B /* SceneDelegate.swift in Sources */,
+				6F22468228EE58460031385B /* AnnotateVC.swift in Sources */,
+				6F22467E28EE57400031385B /* ScanVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,6 +469,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -460,7 +481,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -477,6 +498,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -488,7 +510,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
