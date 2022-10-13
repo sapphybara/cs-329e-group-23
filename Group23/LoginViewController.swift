@@ -19,6 +19,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         // keyboard delegation initializers
         usernameField.delegate = self
         passwordField.delegate = self
+        passwordField.isSecureTextEntry = true
     }
     
     // If user presses the login button do the following
