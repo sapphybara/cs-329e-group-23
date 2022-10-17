@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Tm8-tV-nfA">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fb5-iF-BeG">
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -87,11 +87,11 @@
             </objects>
             <point key="canvasLocation" x="-1253" y="538"/>
         </scene>
-        <!--Login View Controller-->
+        <!--Profile-->
         <scene sceneID="Qfy-Nv-i01">
             <objects>
-                <viewController id="Tm8-tV-nfA" customClass="LoginViewController" customModule="Group23" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="vNx-FA-Psb">
+                <viewController id="Tm8-tV-nfA" userLabel="Profile" customClass="LoginViewController" customModule="Group23" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vNx-FA-Psb" userLabel="Profile Login">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -120,6 +120,7 @@
                                 <buttonConfiguration key="configuration" style="tinted" title="Login" buttonSize="large"/>
                                 <connections>
                                     <action selector="loginButtonPressed:" destination="Tm8-tV-nfA" eventType="touchUpInside" id="ySO-vj-jqX"/>
+                                    <segue destination="hSD-3C-ufI" kind="presentation" identifier="LoginSegue" modalPresentationStyle="fullScreen" id="KuM-Kp-E66"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bJJ-ma-mdd">
@@ -133,7 +134,7 @@
                                     <action selector="createAccountButtonPressed:" destination="Tm8-tV-nfA" eventType="touchUpInside" id="aUZ-Mn-lyr"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GNM-bA-DOq">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GNM-bA-DOq">
                                 <rect key="frame" x="39" y="657" width="350" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="350" id="7tP-T8-xhx"/>
@@ -158,33 +159,57 @@
                             <constraint firstItem="WOa-kZ-EVv" firstAttribute="centerX" secondItem="vNx-FA-Psb" secondAttribute="centerX" id="xw8-Je-uRT"/>
                         </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="me0-y9-tIm"/>
+                    <navigationItem key="navigationItem" id="Zy9-36-Sf9"/>
                     <connections>
                         <outlet property="errorMessage" destination="GNM-bA-DOq" id="KXd-CC-QtC"/>
                         <outlet property="passwordField" destination="hq1-rH-zGl" id="uzj-te-0BV"/>
                         <outlet property="usernameField" destination="uNU-aj-flq" id="jBt-c3-iAm"/>
-                        <segue destination="jH6-A3-r2l" kind="presentation" identifier="LoginSegue" modalPresentationStyle="fullScreen" id="9gy-oI-HO9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P3N-A4-IAE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3202" y="-198"/>
+            <point key="canvasLocation" x="-534" y="538"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="0wh-YT-mU8">
+        <!--User Settings/Backend Data-->
+        <scene sceneID="iJ1-3Q-Sjd">
             <objects>
-                <navigationController id="jH6-A3-r2l" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="E43-sj-rUu"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="bfx-x8-1iC">
-                        <rect key="frame" x="0.0" y="47" width="428" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="fb5-iF-BeG" kind="relationship" relationship="rootViewController" id="3bi-Gb-Xu2"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="pck-8M-dos" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <viewController id="hSD-3C-ufI" userLabel="User Settings/Backend Data" customClass="UserSettingsProfileVC" customModule="Group23" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="l2L-fG-97E">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="User Settings Will Go Here As Well As Any Needed Backend Data" lineBreakMode="wordWrap" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Od4-DK-H33">
+                                <rect key="frame" x="34" y="198" width="360" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="360" id="FUZ-RD-zb2"/>
+                                    <constraint firstAttribute="height" constant="200" id="GaI-Ba-qBk"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ntH-FN-mva">
+                                <rect key="frame" x="176" y="596" width="78" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Logout"/>
+                                <connections>
+                                    <action selector="logoutButtonPressed:" destination="hSD-3C-ufI" eventType="touchUpInside" id="Ygt-6O-m6g"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="AoW-gX-zQ0"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Od4-DK-H33" firstAttribute="centerX" secondItem="l2L-fG-97E" secondAttribute="centerX" id="KAI-XH-I4K"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="vHj-sr-b4d"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e8A-d2-BDG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2222" y="-198"/>
+            <point key="canvasLocation" x="359" y="538"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="dmd-wA-RTF">
@@ -209,7 +234,7 @@
                         <outlet property="tabBarElement" destination="eG5-Nk-QMc" id="RtZ-iP-x62"/>
                         <segue destination="C94-DP-TpO" kind="relationship" relationship="viewControllers" id="kXG-Hw-b7E"/>
                         <segue destination="g4N-Za-cfs" kind="relationship" relationship="viewControllers" id="awO-2X-kNj"/>
-                        <segue destination="bVI-zf-5ZR" kind="relationship" relationship="viewControllers" id="95U-PA-3BZ"/>
+                        <segue destination="Tm8-tV-nfA" kind="relationship" relationship="viewControllers" id="v8G-hD-KH9"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uqd-Ja-RWE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -20,17 +20,32 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         usernameField.delegate = self
         passwordField.delegate = self
         passwordField.isSecureTextEntry = true
+        
+        Auth.auth().addStateDidChangeListener() {
+            auth, user in
+            if user != nil {
+                self.performSegue(withIdentifier: "LoginSegue", sender: nil) // perform segue if user is not logged in
+                self.usernameField.text = nil
+                self.passwordField.text = nil
+            }
+        }
+        
     }
     
     // If user presses the login button do the following
     @IBAction func loginButtonPressed(_ sender: Any) {
-        performSegue(withIdentifier: "LoginSegue", sender: self)
-    }
+        Auth.auth().signIn(withEmail: usernameField.text!, password: passwordField.text!) {
+            authResult, error in
+            if let error = error as NSError? {
+                self.errorMessage.text = "\(error.localizedDescription)"
+                } else {
+                    self.errorMessage.text = ""
+                }
+            }
+        }
     
     // If user presses the create account button do the following
     @IBAction func createAccountButtonPressed(_ sender: Any) {
-        
-        
         
         let alert = UIAlertController(title: "New User?", message: "Create An Account Below" , preferredStyle: .alert)
        
