@@ -120,7 +120,6 @@
                                 <buttonConfiguration key="configuration" style="tinted" title="Login" buttonSize="large"/>
                                 <connections>
                                     <action selector="loginButtonPressed:" destination="Tm8-tV-nfA" eventType="touchUpInside" id="ySO-vj-jqX"/>
-                                    <segue destination="hSD-3C-ufI" kind="presentation" identifier="LoginSegue" modalPresentationStyle="fullScreen" id="KuM-Kp-E66"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bJJ-ma-mdd">
@@ -165,11 +164,12 @@
                         <outlet property="errorMessage" destination="GNM-bA-DOq" id="KXd-CC-QtC"/>
                         <outlet property="passwordField" destination="hq1-rH-zGl" id="uzj-te-0BV"/>
                         <outlet property="usernameField" destination="uNU-aj-flq" id="jBt-c3-iAm"/>
+                        <segue destination="hSD-3C-ufI" kind="presentation" identifier="LoginSegue" modalPresentationStyle="fullScreen" id="HbZ-Z0-94C"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P3N-A4-IAE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-534" y="538"/>
+            <point key="canvasLocation" x="-484" y="555"/>
         </scene>
         <!--User Settings/Backend Data-->
         <scene sceneID="iJ1-3Q-Sjd">
@@ -209,7 +209,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e8A-d2-BDG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="359" y="538"/>
+            <point key="canvasLocation" x="356" y="555"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="dmd-wA-RTF">
