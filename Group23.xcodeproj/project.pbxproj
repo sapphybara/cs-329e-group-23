@@ -486,7 +486,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 362HNP8FMD;
+				DEVELOPMENT_TEAM = J23ZN5L7FV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Group23/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow to use your camera for scanning";
@@ -501,7 +501,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "project.Group23-test";
+				PRODUCT_BUNDLE_IDENTIFIER = project.Group23;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -516,7 +516,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 362HNP8FMD;
+				DEVELOPMENT_TEAM = J23ZN5L7FV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Group23/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow to use your camera for scanning";
@@ -531,7 +531,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "project.Group23-test";
+				PRODUCT_BUNDLE_IDENTIFIER = project.Group23;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

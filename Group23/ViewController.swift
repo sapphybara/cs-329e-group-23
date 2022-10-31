@@ -12,7 +12,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate {
     @IBOutlet weak var tabBarElement: UITabBar!
     override func viewDidLoad() {
         super.viewDidLoad()
-        // allow disabling diboule tab of profile icon
+        // allow disabling double tap of profile icon
         delegate = self
     }
 
