@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import FirebaseCore
+import FirebaseFirestore
+
 
 class ViewController: UITabBarController, UITabBarControllerDelegate {
     
@@ -14,6 +17,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate {
         super.viewDidLoad()
         // allow disabling double tap of profile icon
         delegate = self
+        
+        FirebaseApp.configure()
+        
+        let db = Firestore.firestore()
     }
 
     // disables login screen presentation on second tap of profile tab element
@@ -21,5 +28,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate {
         let tabIdx = tabBarController.viewControllers?.firstIndex(of: viewController)
         return tabIdx != 2 || tabIdx != tabBarController.selectedIndex
     }
+    
+    // firestore data retrieval and upload, update data in app and in firestore
 
 }
