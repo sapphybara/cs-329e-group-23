@@ -11,12 +11,14 @@ import FirebaseCore
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
+    
+    // Below Is Needed Due to Application Launch Bug - SL
+    override init() {
+        FirebaseApp.configure() // For Firebase Setup
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        FirebaseApp.configure() // For Firebase Setup
         return true
     }
 
