@@ -115,28 +115,9 @@ class ScanVC: UIViewController {
 		documentViewVC.delegate = self
 		self.present(documentViewVC, animated: true)
 	}
-    
-//    extension UIImageArray: UIImage {
-//        
-//          func makePDF()-> PDFDocument? {
-//            let pdfDocument = PDFDocument()
-//            for (index,image) in self.enumerated() {
-//                let pdfPage = PDFPage(image: image)
-//                pdfDocument.insert(pdfPage!, at: index)
-//            }
-//            return pdfDocument
-//        }
-//    }
 }
 
 extension ScanVC:VNDocumentCameraViewControllerDelegate {
-//    func makePDF() -> PDFDocument? {
-//        let pdfDocument = PDFDocument()
-//        for (index, image) in self.enumerated() {
-//
-//        }
-//    }
-//
 	func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
         
         // If there are no pdf scans then proceed with else
@@ -158,6 +139,9 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
                 
                 self.imageArray.append(image)
             }
+            
+            // Code to go from PDF > png/jpeg > xc data storage will go here 
+            
             
             self.dismiss(animated: true)
             
