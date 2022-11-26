@@ -115,18 +115,61 @@ class ScanVC: UIViewController {
 		documentViewVC.delegate = self
 		self.present(documentViewVC, animated: true)
 	}
-	
+    
+//    extension UIImageArray: UIImage {
+//        
+//          func makePDF()-> PDFDocument? {
+//            let pdfDocument = PDFDocument()
+//            for (index,image) in self.enumerated() {
+//                let pdfPage = PDFPage(image: image)
+//                pdfDocument.insert(pdfPage!, at: index)
+//            }
+//            return pdfDocument
+//        }
+//    }
 }
 
 extension ScanVC:VNDocumentCameraViewControllerDelegate {
+//    func makePDF() -> PDFDocument? {
+//        let pdfDocument = PDFDocument()
+//        for (index, image) in self.enumerated() {
+//
+//        }
+//    }
+//
 	func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
-		for pageNum in 0..<scan.pageCount {
-			let image: UIImage = scan.imageOfPage(at: pageNum)
-			print("image: \(image)") // for debug only
-			self.imageArray.append(image)
-		}
-		self.dismiss(animated: true)
-		print("imageArray: \(imageArray)")
+        
+        // If there are no pdf scans then proceed with else
+        guard scan.pageCount >= 1 else {
+            controller.dismiss(animated: true)
+            return
+        }
+        
+        // Multithreading for PDF Scan Where Number Of Scans >= 1
+        DispatchQueue.main.async {
+            let pdfDocumentInstance = PDFDocument()
+            
+            for pageNum in 0..<scan.pageCount {
+                let image: UIImage = scan.imageOfPage(at: pageNum)
+                print("image: \(image)") // for debug only
+                
+                let pdfPage = PDFPage(image: image)
+                pdfDocumentInstance.insert(pdfPage!, at: pageNum)
+                
+                self.imageArray.append(image)
+            }
+            
+            self.dismiss(animated: true)
+            
+            // Debug Prints
+            print("imageArray: \(self.imageArray)")
+            
+            print("Image Has Been Scanned, Number of scans: \(self.imageArray.count)")
+            
+            // Save PDF Data to XC Data
+            
+            
+        }
 
 //		Add this to self.dismiss() reload table/collection data after adding to imageArray
 //		{

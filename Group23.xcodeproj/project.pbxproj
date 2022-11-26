@@ -560,7 +560,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 362HNP8FMD;
+				DEVELOPMENT_TEAM = HAP22FG8L2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Group23/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow to use your Camera for scanning";
@@ -590,7 +590,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 362HNP8FMD;
+				DEVELOPMENT_TEAM = HAP22FG8L2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Group23/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow to use your Camera for scanning";
