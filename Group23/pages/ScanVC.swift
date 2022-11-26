@@ -9,6 +9,7 @@ import UIKit
 import VisionKit
 import Photos // needed?
 import PhotosUI
+import PDFKit // Addition for PDF File management - SL
 
 class ScanVC: UIViewController {
 	
