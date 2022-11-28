@@ -140,17 +140,17 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
                 self.imageArray.append(image)
             }
             
-            // Code to go from PDF > png/jpeg > xc data storage will go here 
+            // Code to go from PDF > png/jpeg > xc data storage will go here
             
             
             self.dismiss(animated: true)
             
             // Debug Prints
-            print("imageArray: \(self.imageArray)")
+//            print("imageArray: \(self.imageArray)")
             
-            print("Image Has Been Scanned, Number of scans: \(self.imageArray.count)")
+            print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(self.imageArray.count)\n\n")
             
-            // Save PDF Data to XC Data
+            // Save PDF Data to XC Data Below...
             
             
         }
