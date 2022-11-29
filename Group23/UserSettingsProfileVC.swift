@@ -10,9 +10,17 @@ import FirebaseAuth
 
 class UserSettingsProfileVC: UIViewController {
     
+    let logoutSegue = "logoutSegue"
+    
+    @IBOutlet weak var welcomeMessage: UILabel!
+    var user = Auth.auth().currentUser
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        if user == nil {
+            // make sure the cached user is not nil here, otherwise logout
+            return performSegue(withIdentifier: logoutSegue, sender: self)
+        }
+        welcomeMessage.text = "Welcome, \(user?.displayName ?? "friend")!"
     }
     
     // Logout Button Action
@@ -20,7 +28,6 @@ class UserSettingsProfileVC: UIViewController {
         
         do {
             try Auth.auth().signOut() // logs out, user is now nil
-            navigationController?.popToRootViewController(animated: true)
         } catch {
             print("Sign Out Error")
         }

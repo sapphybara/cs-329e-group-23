@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseCore
 import FirebaseFirestore
+import FirebaseAuth
 
 //internal class PDFFile {
 //   var id = 0 // 0 Dummy ID for File
@@ -40,6 +41,7 @@ import FirebaseFirestore
 class ViewController: UITabBarController, UITabBarControllerDelegate {
     
     @IBOutlet weak var tabBarElement: UITabBar!
+    var currentUser: User?
     override func viewDidLoad() {
         super.viewDidLoad()
         // allow disabling double tap of profile icon
@@ -49,15 +51,36 @@ class ViewController: UITabBarController, UITabBarControllerDelegate {
             FirebaseApp.configure()
         }
         
+        // watch for changes in the user
+        Auth.auth().addStateDidChangeListener { auth, user in
+            self.currentUser = user
+        }
+        
 //        let db = Firestore.firestore()
-    }
-
-    // disables login screen presentation on second tap of profile tab element
-    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        let tabIdx = tabBarController.viewControllers?.firstIndex(of: viewController)
-        return tabIdx != 2 || tabIdx != tabBarController.selectedIndex
     }
     
     // firestore data retrieval and upload, update data in app and in firestore
+    
+    
+    /// determines which view controller to show - account screen if logged in, else login page
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        let index = tabBar.items?.firstIndex(of: item)
+        if index == 2 {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            var vcToShow: UIViewController
+            
+            // show either the login screen or the account screen, depending on auth status
+            if currentUser == nil {
+                vcToShow = storyboard.instantiateViewController(withIdentifier: "loginScreen")
+            } else {
+                vcToShow = storyboard.instantiateViewController(withIdentifier: "AccountView")
+            }
+            
+            // set the correct page for the profile page
+            if let profileNavController = self.viewControllers?[2] as? UINavigationController {
+                profileNavController.setViewControllers([vcToShow], animated: true)
+            }
+        }
+    }
 
 }
