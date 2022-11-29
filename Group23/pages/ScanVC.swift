@@ -11,6 +11,9 @@ import Photos // needed?
 import PhotosUI
 import PDFKit // Addition for PDF File management - SL
 
+var listPDFDocuments: [PDFDocument] = []
+var listPDFThumbnails: [UIImage] = []
+
 class ScanVC: UIViewController {
 	
 	var imageArray: [UIImage] = []
@@ -138,20 +141,30 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
                 pdfDocumentInstance.insert(pdfPage!, at: pageNum)
                 
                 self.imageArray.append(image)
+                
             }
+            // global lists to use in HomeVC
+            listPDFDocuments.append(pdfDocumentInstance)
+            
+            listPDFThumbnails.append(generatePDFThumbnail(currentpdf: listPDFDocuments.last!))
             
             // Code to go from PDF > png/jpeg > xc data storage will go here
-            
             
             self.dismiss(animated: true)
             
             // Debug Prints
 //            print("imageArray: \(self.imageArray)")
             
-            print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(self.imageArray.count)\n\n")
-            
+            //print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(self.imageArray.count)\n\n")
+            print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(listPDFDocuments.count)\n\n")
             // Save PDF Data to XC Data Below...
             
+            //function to turn pdf into thumbnail image
+            func generatePDFThumbnail(currentpdf: PDFDocument) -> UIImage {
+                let pdfDocumentCover = currentpdf.page(at: 0)
+                let thumbnailSize = CGSize(width: 130, height: 200)
+                return (pdfDocumentCover?.thumbnail(of: thumbnailSize, for: .mediaBox))!
+            }
             
         }
 
@@ -165,6 +178,7 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
 	}
 }
 
+// Max can you explain what is happening in the code below and/or convert library image to PDFDocument objects?
 extension ScanVC:PHPickerViewControllerDelegate {
 	func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
 		dismiss(animated: true)
