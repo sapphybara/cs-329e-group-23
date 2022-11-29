@@ -8,9 +8,9 @@
 import UIKit
 import PDFKit
 
-let pdflist = ["pdf 1", "pdf 2", "pdf 3","pdf 4", "pdf 5"]
-
 class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    @IBOutlet weak var scansLabel: UILabel!
     
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -21,6 +21,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         collectionView.delegate = self
         collectionView.dataSource = self
         
+        scansLabel.text = "Scan or Upload something to get started!"
         //        // Add PDFView to view controller.
         //        let pdfView = PDFView(frame: self.view.bounds)
         //        pdfView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -37,6 +38,18 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         // Do any additional setup after loading the view.
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if listPDFDocuments.count != 0{
+            scansLabel.text = "Your PDFs"
+        }
+        print(listPDFDocuments)
+        print(listPDFDocuments.count)
+        print(listPDFThumbnails)
+        print(listPDFThumbnails.count)
+        self.collectionView.reloadData()
+        
+    }
     
     @IBAction func helpButtonPressed(_ sender: Any) {
         let controller = UIAlertController(
@@ -51,15 +64,35 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        pdflist.count
+        listPDFDocuments.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellIdentifier, for: indexPath) as! pdfCollectionViewCell
         let row = indexPath.row
-        cell.myLabel.text = pdflist[row]
-        cell.myImage.image = UIImage(named:"sample-scan-image-1")
+        
+        cell.myImage.image =  listPDFThumbnails[row]
         
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("picked pdf \(indexPath.item)")
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let layout = UICollectionViewFlowLayout()
+        let containerWidth = collectionView.bounds.width
+        let cellSize = (containerWidth-20)/3
+        layout.itemSize = CGSize(width: cellSize, height: cellSize * 1.3)
+        layout.minimumLineSpacing = 20
+        layout.minimumInteritemSpacing = 4
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 4, bottom: 0, right: 4)
+        
+        collectionView.collectionViewLayout = layout
+    }
+    
 }
