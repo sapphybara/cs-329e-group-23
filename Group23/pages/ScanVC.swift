@@ -23,12 +23,37 @@ private let storageRef = Storage.storage(url:"gs://final-project-group-23.appspo
 
 
 // In development
-//// firebase db data retreival
-//func serverUserFilesDataRetreival() -> [PDFDocument] {
-//    let dbRef = storageRef.child("userFiles")
-//
-//    dbRef.listAll().items
-//}
+// firebase db data retreival
+//func serverUserFilesDataRetrieval() -> [PDFDocument] { // Original Header
+func serverUserFilesDataRetrieval() { // Test Header
+    let dbUserFilesRef = storageRef.child("userFiles")
+    
+    dbUserFilesRef.listAll{ (result, error) in
+        if let error = error {
+            print(error.localizedDescription)
+        }
+        
+        print("\nRetrieving DB Data...\n")
+        
+        for item in result!.items {
+            print(item.name)
+        }
+    }
+    
+//    storageReference.listAll { (result, error) in
+//      if let error = error {
+//        // ...
+//      }
+//      for prefix in result.prefixes {
+//        // The prefixes under storageReference.
+//        // You may call listAll(completion:) recursively on them.
+//      }
+//      for item in result.items {
+//        // The items under storageReference.
+//      }
+//    }
+    
+}
 
 class ScanVC: UIViewController {
 	
@@ -143,7 +168,7 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
         print("\nUploading Instantiated Document...")
         
         // Upload the file to the path "images/rivers.jpg"
-        let uploadTask = pdfRef.putData(pdfDocument.dataRepresentation()!, metadata: nil)
+        _ = pdfRef.putData(pdfDocument.dataRepresentation()!, metadata: nil)
     }
     
 	func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
