@@ -39,20 +39,6 @@ func serverUserFilesDataRetrieval() { // Test Header
             print(item.name)
         }
     }
-    
-//    storageReference.listAll { (result, error) in
-//      if let error = error {
-//        // ...
-//      }
-//      for prefix in result.prefixes {
-//        // The prefixes under storageReference.
-//        // You may call listAll(completion:) recursively on them.
-//      }
-//      for item in result.items {
-//        // The items under storageReference.
-//      }
-//    }
-    
 }
 
 class ScanVC: UIViewController {
@@ -226,38 +212,6 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
             
             // upload data to server
             self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal)
-
-            // BELOW IS JUNK CODE, DO NOT TOUCH I AM TESTING A FUNCTION
-//            let localFile = pdfDocumentInstance
-//
-//            print("CHECK: \(String(describing: localFile))")
-
-            // Data in memory
-//            let data = Data()
-            
-//            let pdfRef = storageRef.child("userFiles/File_\(pdfDocIDExternal).pdf")
-//
-//            print("PROCEEDING!")
-            
-            // Upload the file to the path "images/rivers.jpg"
-//            let uploadTask = pdfRef.putData(pdfDocumentInstance.dataRepresentation()!, metadata: nil)
-//            { (metadata, error) in
-//              guard let metadata = metadata else {
-//                // Uh-oh, an error occurred!
-//                  print(error!)
-//                return
-//              }
-//              // Metadata contains file metadata such as size, content-type.
-//              let size = metadata.size
-//              // You can also access to download URL after upload.
-//              pdfRef.downloadURL { (url, error) in
-//                guard let downloadURL = url else {
-//                  // Uh-oh, an error occurred!
-//                    print(error!)
-//                  return
-//                }
-//              }
-//            }
             
             // global lists to use in HomeVC
             listPDFDocuments.append(pdfDocumentInstance)
