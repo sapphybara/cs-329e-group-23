@@ -43,10 +43,10 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         if listPDFDocuments.count != 0{
             scansLabel.text = "Your PDFs"
         }
-        print(listPDFDocuments)
-        print(listPDFDocuments.count)
-        print(listPDFThumbnails)
-        print(listPDFThumbnails.count)
+//        print(listPDFDocuments)
+//        print(listPDFDocuments.count)
+//        print(listPDFThumbnails)
+//        print(listPDFThumbnails.count)
         self.collectionView.reloadData()
         
     }

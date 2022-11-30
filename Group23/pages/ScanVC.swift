@@ -9,10 +9,18 @@ import UIKit
 import VisionKit
 import Photos // needed?
 import PhotosUI
-import PDFKit // Addition for PDF File management - SL
+import PDFKit
+import FirebaseAuth
+import FirebaseCore
+import FirebaseStorage // Addition for PDF File management - SL
 
 var listPDFDocuments: [PDFDocument] = []
 var listPDFThumbnails: [UIImage] = []
+var pdfStoredObjects: [(PDFDocument, Int)] = []
+
+
+// firebase storage setup
+private let storageRef = Storage.storage(url:"gs://final-project-group-23.appspot.com/").reference()
 
 class ScanVC: UIViewController {
 	
@@ -20,7 +28,6 @@ class ScanVC: UIViewController {
 	
 	@IBOutlet weak var initialTextLabel1: UILabel!
 	@IBOutlet weak var initialTextLabel2: UILabel!
-	
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -121,6 +128,7 @@ class ScanVC: UIViewController {
 }
 
 extension ScanVC:VNDocumentCameraViewControllerDelegate {
+    
 	func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
         
         // If there are no pdf scans then proceed with else
@@ -131,6 +139,32 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
         
         // Multithreading for PDF Scan Where Number Of Scans >= 1
         DispatchQueue.main.async {
+            var pdfDocIDExternal: Int
+            
+            // Block of code below makes a file ID and makes sure that ID does not exist
+            func idMaker(pdfListCheck: [(PDFDocument, Int)]) -> Int {
+                var pdfDocID: Int
+                var idArray:[Int] = []
+                
+                for pdfFileIDs in pdfListCheck {
+                    idArray.append(pdfFileIDs.1)
+                }
+                
+                // ID Generator
+                pdfDocID = Int.random(in: 0..<100000)
+                
+                if idArray.contains(pdfDocID) {
+                    while idArray.contains(pdfDocID) {
+                        print("\nID \(pdfDocID) Is Already In Use, Generating New PDF File ID\n")
+                        pdfDocID = Int.random(in: 0..<100000)
+                    }
+                }
+                
+                print("\nNew PDF Document Has An ID of \(pdfDocID)")
+                return pdfDocID
+            }
+            
+            // PDF file or PDF document instantiation
             let pdfDocumentInstance = PDFDocument()
             
             for pageNum in 0..<scan.pageCount {
@@ -143,12 +177,46 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
                 self.imageArray.append(image)
                 
             }
+            
+            // append pdf document and document id to array for server side data management
+            pdfDocIDExternal = idMaker(pdfListCheck: pdfStoredObjects)
+            pdfStoredObjects.append((pdfDocumentInstance, pdfDocIDExternal))
+            
+//            let localFile = pdfDocumentInstance
+//
+//            print("CHECK: \(String(describing: localFile))")
+
+            // Data in memory
+//            let data = Data()
+            
+            let pdfRef = storageRef.child("userFiles/File_\(pdfDocIDExternal).pdf")
+            
+            print("PROCEEDING!")
+            
+            // Upload the file to the path "images/rivers.jpg"
+            let uploadTask = pdfRef.putData(pdfDocumentInstance.dataRepresentation()!, metadata: nil)
+//            { (metadata, error) in
+//              guard let metadata = metadata else {
+//                // Uh-oh, an error occurred!
+//                  print(error!)
+//                return
+//              }
+//              // Metadata contains file metadata such as size, content-type.
+//              let size = metadata.size
+//              // You can also access to download URL after upload.
+//              pdfRef.downloadURL { (url, error) in
+//                guard let downloadURL = url else {
+//                  // Uh-oh, an error occurred!
+//                    print(error!)
+//                  return
+//                }
+//              }
+//            }
+            
             // global lists to use in HomeVC
             listPDFDocuments.append(pdfDocumentInstance)
             
             listPDFThumbnails.append(generatePDFThumbnail(currentpdf: listPDFDocuments.last!))
-            
-            // Code to go from PDF > png/jpeg > xc data storage will go here
             
             self.dismiss(animated: true)
             
@@ -165,7 +233,6 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
                 let thumbnailSize = CGSize(width: 130, height: 200)
                 return (pdfDocumentCover?.thumbnail(of: thumbnailSize, for: .mediaBox))!
             }
-            
         }
 
 //		Add this to self.dismiss() reload table/collection data after adding to imageArray

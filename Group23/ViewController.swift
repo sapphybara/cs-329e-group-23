@@ -6,37 +6,9 @@
 //
 
 import UIKit
-import FirebaseCore
-import FirebaseFirestore
+//import FirebaseCore
+//import FirebaseFirestore
 import FirebaseAuth
-
-//internal class PDFFile {
-//   var id = 0 // 0 Dummy ID for File
-////content = someBinary Object // commented out until this is confirmed
-//}
-//
-//// Global pdfList Object Storage
-//var pdfList: [PDFFile] = []
-//
-//func idMaker(PDFFile: PDFFile, pdfList: pdfList) { // MAX Stick This Code For ID'ing PDF Objects
-//    // ID Generator
-//    let pdfFileID = Int.random(in: 0..<100000)
-//
-//    // This will check to see if an ID is already instatiated for any PDF file
-//    for pdfFileItem in pdfList {
-//        if pdfFileItem.id == pdfFileID {
-//            while pdfFileItem.id == pdfFileID {
-//                print("\nID \(pdfFileID) Is Already In Use, Generating New PDF File ID\n")
-//                let pdfFileID = Int.random(in: 0..<100000)
-//                PDFFile.id = pdfFileID
-//                continue
-//            }
-//        } else {
-//            PDFFile.id = pdfFileID
-//            print("\nNew PDF Files Has An ID of \(pdfFile.id)n")
-//        }
-//    }
-//}
 
 class ViewController: UITabBarController, UITabBarControllerDelegate {
     
@@ -44,25 +16,22 @@ class ViewController: UITabBarController, UITabBarControllerDelegate {
     var currentUser: User?
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // allow disabling double tap of profile icon
         delegate = self
-        
-        if FirebaseApp.app() == nil {
-            FirebaseApp.configure()
-        }
-        
-        // watch for changes in the user
-        Auth.auth().addStateDidChangeListener { auth, user in
-            self.currentUser = user
-        }
-        
-//        let db = Firestore.firestore()
+    
+        // Testing for Junk Below - SL
+//        if FirebaseApp.app() == nil {
+//            FirebaseApp.configure()
+//        }
+//
+//        // watch for changes in the user
+//        Auth.auth().addStateDidChangeListener { auth, user in
+//            self.currentUser = user
+//        }
     }
     
-    // firestore data retrieval and upload, update data in app and in firestore
-    
-    
-    /// determines which view controller to show - account screen if logged in, else login page
+    // determines which view controller to show - account screen if logged in, else login page
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         let index = tabBar.items?.firstIndex(of: item)
         if index == 2 {
@@ -82,5 +51,4 @@ class ViewController: UITabBarController, UITabBarControllerDelegate {
             }
         }
     }
-
 }
