@@ -18,9 +18,17 @@ var listPDFDocuments: [PDFDocument] = []
 var listPDFThumbnails: [UIImage] = []
 var pdfStoredObjects: [(PDFDocument, Int)] = []
 
-
-// firebase storage setup
+// firebase db storage setup
 private let storageRef = Storage.storage(url:"gs://final-project-group-23.appspot.com/").reference()
+
+
+// In development
+//// firebase db data retreival
+//func serverUserFilesDataRetreival() -> [PDFDocument] {
+//    let dbRef = storageRef.child("userFiles")
+//
+//    dbRef.listAll().items
+//}
 
 class ScanVC: UIViewController {
 	
@@ -128,6 +136,15 @@ class ScanVC: UIViewController {
 }
 
 extension ScanVC:VNDocumentCameraViewControllerDelegate {
+    // This function uploads and retrieves data from server
+    func serverFileUpload(pdfDocument: PDFDocument, pdfID: Int) {
+        let pdfRef = storageRef.child("userFiles/File_\(pdfID).pdf")
+        
+        print("\nUploading Instantiated Document...")
+        
+        // Upload the file to the path "images/rivers.jpg"
+        let uploadTask = pdfRef.putData(pdfDocument.dataRepresentation()!, metadata: nil)
+    }
     
 	func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
         
@@ -182,6 +199,10 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
             pdfDocIDExternal = idMaker(pdfListCheck: pdfStoredObjects)
             pdfStoredObjects.append((pdfDocumentInstance, pdfDocIDExternal))
             
+            // upload data to server
+            self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal)
+
+            // BELOW IS JUNK CODE, DO NOT TOUCH I AM TESTING A FUNCTION
 //            let localFile = pdfDocumentInstance
 //
 //            print("CHECK: \(String(describing: localFile))")
@@ -189,12 +210,12 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
             // Data in memory
 //            let data = Data()
             
-            let pdfRef = storageRef.child("userFiles/File_\(pdfDocIDExternal).pdf")
-            
-            print("PROCEEDING!")
+//            let pdfRef = storageRef.child("userFiles/File_\(pdfDocIDExternal).pdf")
+//
+//            print("PROCEEDING!")
             
             // Upload the file to the path "images/rivers.jpg"
-            let uploadTask = pdfRef.putData(pdfDocumentInstance.dataRepresentation()!, metadata: nil)
+//            let uploadTask = pdfRef.putData(pdfDocumentInstance.dataRepresentation()!, metadata: nil)
 //            { (metadata, error) in
 //              guard let metadata = metadata else {
 //                // Uh-oh, an error occurred!
