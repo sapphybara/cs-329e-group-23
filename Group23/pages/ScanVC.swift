@@ -74,7 +74,7 @@ class ScanVC: UIViewController {
 		var configuration = PHPickerConfiguration(photoLibrary: .shared())
 		
 		// Set the filter type according to the user’s selection.
-		configuration.filter = .all(of: [.images])
+//		configuration.filter = .all(of: [.images])
 		// Set the mode to avoid transcoding, if possible, if your app supports arbitrary image/video encodings.
 		configuration.preferredAssetRepresentationMode = .current
 		// Set the selection behavior to respect the user’s selection order.

@@ -13,6 +13,7 @@ class UserSettingsProfileVC: UIViewController {
     let logoutSegue = "logoutSegue"
     
     @IBOutlet weak var welcomeMessage: UILabel!
+    @IBOutlet weak var profileImage: UIImageView!
     var user = Auth.auth().currentUser
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +21,19 @@ class UserSettingsProfileVC: UIViewController {
             // make sure the cached user is not nil here, otherwise logout
             return performSegue(withIdentifier: logoutSegue, sender: self)
         }
-        welcomeMessage.text = "Welcome, \(user?.displayName ?? "friend")!"
+//        welcomeMessage.text = "Welcome, \(user?.displayName ?? "friend")!"
+        profileImage.layer.borderWidth = 3
+        profileImage.layer.borderColor = UIColor(named: "success3")?.cgColor
+        // here, get the user's image if exists and set profileImage.image = ...
+    }
+    
+    // make the profile pic exactly circular
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        profileImage.layer.cornerRadius = profileImage.frame.height / 2
+        profileImage.layer.masksToBounds = false
+        profileImage.clipsToBounds = true
     }
     
     // Logout Button Action
