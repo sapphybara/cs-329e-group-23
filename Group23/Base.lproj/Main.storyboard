@@ -442,10 +442,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <containerView opaque="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bns-Vq-YD9">
-                                <rect key="frame" x="0.0" y="410.66666666666669" width="390" height="65.333333333333314"/>
-                                <color key="backgroundColor" name="surface1"/>
+                                <rect key="frame" x="0.0" y="410.66666666666669" width="390" height="70"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="Vq1-2b-Fo6"/>
+                                </constraints>
                                 <connections>
-                                    <segue destination="Sfp-85-MDe" kind="embed" id="5ME-mH-SgB"/>
+                                    <segue destination="Sfp-85-MDe" kind="embed" identifier="tableSegue" id="5ME-mH-SgB"/>
                                 </connections>
                             </containerView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" role="primary" translatesAutoresizingMaskIntoConstraints="NO" id="fwd-GA-i6S">
@@ -472,7 +475,6 @@
                             <constraint firstItem="C1D-Lx-JEw" firstAttribute="top" secondItem="LqS-S3-ngZ" secondAttribute="top" id="OC7-Ff-aQ4"/>
                             <constraint firstItem="1lu-sE-upT" firstAttribute="trailing" secondItem="LqS-S3-ngZ" secondAttribute="trailing" id="SCg-er-YOt"/>
                             <constraint firstItem="C1D-Lx-JEw" firstAttribute="leading" secondItem="LqS-S3-ngZ" secondAttribute="leading" id="SdP-B0-dy5"/>
-                            <constraint firstItem="Bns-Vq-YD9" firstAttribute="height" secondItem="LqS-S3-ngZ" secondAttribute="height" multiplier="1:11.6" id="aQN-Fd-ntZ"/>
                             <constraint firstItem="C1D-Lx-JEw" firstAttribute="height" secondItem="LqS-S3-ngZ" secondAttribute="height" multiplier="2:3" id="bC5-vg-VoR"/>
                             <constraint firstItem="C1D-Lx-JEw" firstAttribute="trailing" secondItem="LqS-S3-ngZ" secondAttribute="trailing" id="eRD-TQ-kA3"/>
                             <constraint firstItem="Y9P-oX-kSU" firstAttribute="height" secondItem="LqS-S3-ngZ" secondAttribute="height" multiplier="0.195767" id="fzB-fj-Gp3"/>
@@ -485,8 +487,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="owz-Au-ZfV"/>
                     <connections>
+                        <outlet property="actionView" destination="Bns-Vq-YD9" id="Vrd-Ph-1kB"/>
                         <outlet property="profileImage" destination="Y9P-oX-kSU" id="f7t-Ko-Z3s"/>
-                        <outlet property="welcomeMessage" destination="OuM-6q-Gjl" id="z7a-Uy-MCl"/>
+                        <outlet property="profileOrName" destination="OuM-6q-Gjl" id="RgT-VC-8Kv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CIM-7n-lIo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -497,25 +500,26 @@
         <scene sceneID="XbE-DD-oER">
             <objects>
                 <tableViewController id="Sfp-85-MDe" customClass="ProfileTable" customModule="Group23" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="BsW-mm-9mp">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="65.333333333333329"/>
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="1" estimatedSectionFooterHeight="-1" id="BsW-mm-9mp">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="70"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <color key="separatorColor" name="text-disabled"/>
+                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <color key="sectionIndexColor" name="text-medium-emphasis"/>
                         <color key="sectionIndexBackgroundColor" name="surface3"/>
                         <sections>
                             <tableViewSection id="KB2-wN-DF6">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="8BY-xi-8qc">
-                                        <rect key="frame" x="0.0" y="18" width="390" height="31.333333969116211"/>
+                                        <rect key="frame" x="0.0" y="1" width="390" height="31.666666030883789"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8BY-xi-8qc" id="YCm-Dg-dVe">
-                                            <rect key="frame" x="0.0" y="0.0" width="360.33333333333331" height="31.333333969116211"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="360.33333333333331" height="31.666666030883789"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ibw-OL-jgo">
-                                                    <rect key="frame" x="20" y="0.0" width="45" height="31.333333333333332"/>
+                                                    <rect key="frame" x="20" y="0.0" width="45" height="31.666666666666668"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" image="pencil" catalog="system">
                                                         <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" weight="semibold"/>
@@ -539,16 +543,17 @@
                                         <constraints>
                                             <constraint firstItem="mP3-9Z-UpF" firstAttribute="centerX" secondItem="8BY-xi-8qc" secondAttribute="centerX" id="KXN-sy-LaW"/>
                                         </constraints>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="XLU-9a-ykL">
-                                        <rect key="frame" x="0.0" y="49.333333969116211" width="390" height="31.333333969116211"/>
+                                        <rect key="frame" x="0.0" y="32.666666030883789" width="390" height="31.666666030883789"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="XLU-9a-ykL" id="gTI-wb-ymF">
-                                            <rect key="frame" x="0.0" y="0.0" width="360.33333333333331" height="31.333333969116211"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="360.33333333333331" height="31.666666030883789"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uLN-qq-ES9">
-                                                    <rect key="frame" x="20" y="0.0" width="47" height="31.333333333333332"/>
+                                                    <rect key="frame" x="20" y="0.0" width="47" height="31.666666666666668"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" image="gearshape.fill" catalog="system">
                                                         <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" weight="semibold"/>
@@ -572,6 +577,7 @@
                                         <constraints>
                                             <constraint firstItem="tOT-Pj-QFl" firstAttribute="centerX" secondItem="XLU-9a-ykL" secondAttribute="centerX" id="8kw-E9-U4x"/>
                                         </constraints>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>

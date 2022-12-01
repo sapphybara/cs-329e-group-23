@@ -11,20 +11,25 @@ import FirebaseAuth
 class UserSettingsProfileVC: UIViewController {
     
     let logoutSegue = "logoutSegue"
+    var containerSegue = "tableSegue"
     
-    @IBOutlet weak var welcomeMessage: UILabel!
+    @IBOutlet weak var profileOrName: UILabel!
     @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var actionView: UIView!
     var user = Auth.auth().currentUser
     override func viewDidLoad() {
         super.viewDidLoad()
-        if user == nil {
+        if let currentUser = user {
+            profileImage.layer.borderWidth = 3
+            profileImage.layer.borderColor = UIColor(named: "success3")?.cgColor
+            if let name = currentUser.displayName {
+                profileOrName.text = "Welcome, \(name)";
+            }
+        } else {
             // make sure the cached user is not nil here, otherwise logout
             return performSegue(withIdentifier: logoutSegue, sender: self)
         }
-//        welcomeMessage.text = "Welcome, \(user?.displayName ?? "friend")!"
-        profileImage.layer.borderWidth = 3
-        profileImage.layer.borderColor = UIColor(named: "success3")?.cgColor
-        // here, get the user's image if exists and set profileImage.image = ...
+        
     }
     
     // make the profile pic exactly circular
@@ -34,6 +39,12 @@ class UserSettingsProfileVC: UIViewController {
         profileImage.layer.cornerRadius = profileImage.frame.height / 2
         profileImage.layer.masksToBounds = false
         profileImage.clipsToBounds = true
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == containerSegue, let table = segue.destination as? ProfileTable {
+            table.view.translatesAutoresizingMaskIntoConstraints = false
+        }
     }
     
     // Logout Button Action

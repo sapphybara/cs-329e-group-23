@@ -8,7 +8,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
          <BreakpointContent
             uuid = "B96EBCBB-9363-4B0E-BFE6-0266742B5DE7"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             symbolName = "UIViewAlertForUnsatisfiableConstraints"
