@@ -244,17 +244,26 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
             
             // make a document id for server side data management
             pdfDocIDExternal = idMaker(pdfListCheck: pdfStoredObjects)
+                        
+            // TEST LINE DO NOT TOUCH
+            let pdfRef = storageRef.child("userFiles/File_\(pdfDocIDExternal).pdf")
+            
+            // TEST LINE DO NOT TOUCH
+            print("\nTemporary Procedure For Data Upload...")
+            
+            // TEST LINE DO NOT TOUCH
+            _ = pdfRef.putData(pdfDocumentInstance.dataRepresentation()!, metadata: nil)
             
             // upload data to server
-            self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal)
+//            self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal) // Commented out For Home VC Dev
             
             // retreive data from server for synchronized file management for global lists to use in HomeVC
-            listPDFDocuments = serverUserFilesDataRetrieval()
+//            listPDFDocuments = serverUserFilesDataRetrieval() // Commented out For Home VC Dev
             
             print("\nCount Check: \(listPDFDocuments.count)\n")
             
             // global lists to use in HomeVC
-//            listPDFDocuments.append(pdfDocumentInstance)
+            listPDFDocuments.append(pdfDocumentInstance)
             
             listPDFThumbnails.append(generatePDFThumbnail(currentpdf: listPDFDocuments.last!))
             
