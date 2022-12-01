@@ -37,8 +37,8 @@ func serverUserFilesDataRetrieval() -> [PDFDocument] { // Original Header
             print("\nRetrieving DB Data...")
             
             // this retreives pdfdocuments and file id's from originally given name
-            if result.items.count > 0 {
-                for item in result.items {
+            if result!.items.count > 0 {
+                for item in result!.items {
                     // get original file id from server-stored name
                     let strIDNameSearch = String(item.name)
                     let firstIndex = strIDNameSearch.firstIndex(of: "_")
