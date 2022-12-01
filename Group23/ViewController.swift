@@ -20,7 +20,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate {
         // allow disabling double tap of profile icon
         delegate = self
     
-        // Testing for Junk Below - SL
+        // Testing To See If Below Is Junk, Do Not Touch - SL
 //        if FirebaseApp.app() == nil {
 //            FirebaseApp.configure()
 //        }

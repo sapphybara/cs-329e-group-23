@@ -24,21 +24,57 @@ private let storageRef = Storage.storage(url:"gs://final-project-group-23.appspo
 
 // In development
 // firebase db data retreival
-//func serverUserFilesDataRetrieval() -> [PDFDocument] { // Original Header
-func serverUserFilesDataRetrieval() { // Test Header
+func serverUserFilesDataRetrieval() -> [PDFDocument] { // Original Header
+//func serverUserFilesDataRetrieval() { // Test Header
     let dbUserFilesRef = storageRef.child("userFiles")
+    var listPDFDocumentsInternal: [PDFDocument] = []
     
     dbUserFilesRef.listAll{ (result, error) in
         if let error = error {
             print(error.localizedDescription)
-        }
-        
-        print("\nRetrieving DB Data...\n")
-        
-        for item in result!.items {
-            print(item.name)
+        } else {
+            
+            print("\nRetrieving DB Data...")
+            
+            // this retreives pdfdocuments and file id's from originally given name
+            if result!.items.count > 0 {
+                for item in result!.items {
+                    // get original file id from server-stored name
+                    let strIDNameSearch = String(item.name)
+                    let firstIndex = strIDNameSearch.firstIndex(of: "_")
+                    let firstIndexOneOver = strIDNameSearch.index(after: firstIndex!)
+                    let secondIndex = strIDNameSearch.lastIndex(of: ".")
+                    let range = firstIndexOneOver..<secondIndex!
+                    let tempFileID = Int(strIDNameSearch[range])!
+                    
+                    // get pdf document from server
+                    let path = dbUserFilesRef.child("\(strIDNameSearch)")
+                    
+                    path.getData(maxSize: 1024 * 1024) { (data, error) -> Void in
+                        let pdfFileItem = PDFDocument(data: data!)!
+                        
+                        // pdf tuple array for file management on UI and server side
+                        pdfStoredObjects.append((pdfFileItem, tempFileID))
+                        
+                        // pdf array for quick UI use access
+                        listPDFDocumentsInternal.append(pdfFileItem)
+                    }
+                    
+//                    downloadTask.observeStatus(.Resume) { (snapshot) -> Void in
+//                          print("Downloading has started")
+//
+//
+//                      }
+                    
+                    print("pdfDocument Retreival Path: \(path)")
+                    print("fileID Retrieved = \"\(tempFileID)\"\n")
+                }
+            } else {
+                print("\nNo Files Stored In Server DB...")
+            }
         }
     }
+    return listPDFDocumentsInternal
 }
 
 class ScanVC: UIViewController {
@@ -206,15 +242,19 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
                 
             }
             
-            // append pdf document and document id to array for server side data management
+            // make a document id for server side data management
             pdfDocIDExternal = idMaker(pdfListCheck: pdfStoredObjects)
-            pdfStoredObjects.append((pdfDocumentInstance, pdfDocIDExternal))
             
             // upload data to server
             self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal)
             
+            // retreive data from server for synchronized file management for global lists to use in HomeVC
+            listPDFDocuments = serverUserFilesDataRetrieval()
+            
+            print("\nCount Check: \(listPDFDocuments.count)\n")
+            
             // global lists to use in HomeVC
-            listPDFDocuments.append(pdfDocumentInstance)
+//            listPDFDocuments.append(pdfDocumentInstance)
             
             listPDFThumbnails.append(generatePDFThumbnail(currentpdf: listPDFDocuments.last!))
             
@@ -225,7 +265,6 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
             
             //print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(self.imageArray.count)\n\n")
             print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(listPDFDocuments.count)\n\n")
-            // Save PDF Data to XC Data Below...
             
             //function to turn pdf into thumbnail image
             func generatePDFThumbnail(currentpdf: PDFDocument) -> UIImage {

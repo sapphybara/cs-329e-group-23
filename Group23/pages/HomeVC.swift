@@ -40,14 +40,14 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     
     override func viewDidAppear(_ animated: Bool) {
         
-        // This line block of code is just for testing the retreival function
-        serverUserFilesDataRetrieval()
+//        // This line block of code is just for testing the retreival function
+//        serverUserFilesDataRetrieval()
         
         if listPDFDocuments.count != 0{
             scansLabel.text = "Your PDFs"
         }
 //        print(listPDFDocuments)
-//        print(listPDFDocuments.count)
+        print(listPDFDocuments.count)
 //        print(listPDFThumbnails)
 //        print(listPDFThumbnails.count)
         self.collectionView.reloadData()
