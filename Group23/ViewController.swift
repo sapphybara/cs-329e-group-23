@@ -23,4 +23,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate {
 //            FirebaseApp.configure()
 //        }
     }
+    
+    // disables login screen presentation on second tap of profile tab element
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        let tabIdx = tabBarController.viewControllers?.firstIndex(of: viewController)
+        return tabIdx != 2 || tabIdx != tabBarController.selectedIndex
+    }
 }
