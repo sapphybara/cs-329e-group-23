@@ -10,7 +10,7 @@ import FirebaseAuth
 
 /// handles the login screen for the user
 /// NOTE: derived from Warren's HW5
-class LoginVC: UIViewController {
+class LoginVC: UIViewController, UITextFieldDelegate {
     
     let loginLabelText = "Sign In"
     let signUpLabelText = "Sign Up"
@@ -28,6 +28,9 @@ class LoginVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+		emailField.delegate = self
+		passwordField.delegate = self
+		confirmPasswordField.delegate = self
         showLoginScreen()
 
         Auth.auth().addStateDidChangeListener() { auth, user in
@@ -103,5 +106,16 @@ class LoginVC: UIViewController {
             self.statusLabel.text = ""
         }
     }
+	
+	/// Called when 'return' key pressed
+	func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return true
+	}
+	
+	/// Called when the user clicks on the view outside of the UITextField
+	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+		self.view.endEditing(true)
+	}
     
 }
