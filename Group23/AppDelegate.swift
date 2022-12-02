@@ -14,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // Below Is Needed Due to Application Launch Bug - SL
     override init() {
+        super.init()
         FirebaseApp.configure() // For Firebase Setup
     }
 
