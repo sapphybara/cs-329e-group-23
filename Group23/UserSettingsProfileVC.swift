@@ -89,6 +89,8 @@ class UserSettingsProfileVC: UIViewController {
         btn.setImage(isUserEditingProfile ? saveImg : pencilImg, for: .normal)
         inputStack.isHidden = !isUserEditingProfile
         valuesStack.isHidden = isUserEditingProfile
+        editOverlay.isHidden = !isUserEditingProfile
+        profileImage.alpha = isUserEditingProfile ? 0.75 : 1
     }
     
     @IBAction func handleProfileEdit(_ sender: UIButton) {
