@@ -15,6 +15,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     @IBOutlet weak var collectionView: UICollectionView!
     
     let collectionCellIdentifier = "pdfCell"
+    let segueID = "PdfSegue"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +48,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             scansLabel.text = "Your PDFs"
         }
 //        print(listPDFDocuments)
-        print(listPDFDocuments.count)
+        print("number of scans \(listPDFDocuments.count)")
 //        print(listPDFThumbnails)
 //        print(listPDFThumbnails.count)
         self.collectionView.reloadData()
@@ -82,6 +83,18 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("picked pdf \(indexPath.item)")
         
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == segueID,
+           let destination = segue.destination as? FullPdfVC,
+           let selectedIndex = collectionView.indexPathsForSelectedItems{
+            let finalIndexPathArray = Array(selectedIndex)
+            let finalIndexPath = finalIndexPathArray.last
+            let finalIndex = Int((finalIndexPath?.last!)!)
+            print(finalIndex)
+            destination.currentPDF = listPDFDocuments[finalIndex]
+        }
     }
     
     override func viewDidLayoutSubviews() {
