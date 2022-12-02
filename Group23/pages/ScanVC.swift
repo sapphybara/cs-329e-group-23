@@ -22,62 +22,6 @@ var pdfStoredObjects: [(PDFDocument, Int)] = []
 private let storageRef = Storage.storage(url:"gs://final-project-group-23.appspot.com/").reference()
 //private let urlString = "gs://final-project-group-23.appspot.com/"
 
-
-//// In development
-//// firebase db data retreival
-//func serverUserFilesDataRetrieval() -> [PDFDocument] { // Original Header
-////func serverUserFilesDataRetrieval() { // Test Header
-//    let dbUserFilesRef = storageRef.child("userFiles")
-//    var listPDFDocumentsInternal: [PDFDocument] = []
-//
-//    dbUserFilesRef.listAll{ (result, error) in
-//        if let error = error {
-//            print(error.localizedDescription)
-//        } else {
-//
-//            print("\nRetrieving DB Data...")
-//
-//            // this retreives pdfdocuments and file id's from originally given name
-//            if result!.items.count > 0 {
-//                for item in result!.items {
-//                    // get original file id from server-stored name
-//                    let strIDNameSearch = String(item.name)
-//                    let firstIndex = strIDNameSearch.firstIndex(of: "_")
-//                    let firstIndexOneOver = strIDNameSearch.index(after: firstIndex!)
-//                    let secondIndex = strIDNameSearch.lastIndex(of: ".")
-//                    let range = firstIndexOneOver..<secondIndex!
-//                    let tempFileID = Int(strIDNameSearch[range])!
-//
-//                    // get pdf document from server
-//                    let path = dbUserFilesRef.child("\(strIDNameSearch)")
-//
-//                    path.getData(maxSize: 1024 * 1024) { (data, error) -> Void in
-//                        let pdfFileItem = PDFDocument(data: data!)!
-//
-//                        // pdf tuple array for file management on UI and server side
-//                        pdfStoredObjects.append((pdfFileItem, tempFileID))
-//
-//                        // pdf array for quick UI use access
-//                        listPDFDocumentsInternal.append(pdfFileItem)
-//                    }
-//
-////                    downloadTask.observeStatus(.Resume) { (snapshot) -> Void in
-////                          print("Downloading has started")
-////
-////
-////                      }
-//
-//                    print("pdfDocument Retreival Path: \(path)")
-//                    print("fileID Retrieved = \"\(tempFileID)\"\n")
-//                }
-//            } else {
-//                print("\nNo Files Stored In Server DB...")
-//            }
-//        }
-//    }
-//    return listPDFDocumentsInternal
-//}
-
 class ScanVC: UIViewController {
 	
 	var imageArray: [UIImage] = []
@@ -173,8 +117,8 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
                 print("\nRetrieving DB Data...")
                 
                 // this retreives pdfdocuments and file id's from originally given name
-                if result!.items.count > 0 {
-                    for item in result!.items {
+                if result.items.count > 0 {
+                    for item in result.items {
                         // get original file id from server-stored name
                         let strIDNameSearch = String(item.name)
                         let firstIndex = strIDNameSearch.firstIndex(of: "_")
