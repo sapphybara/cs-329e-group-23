@@ -30,7 +30,8 @@ class UserSettingsProfileVC: UIViewController {
     @IBOutlet weak var phone: UILabel!
     @IBOutlet weak var email: UILabel!
     @IBOutlet weak var profileImage: UIImageView!
-    //    @IBOutlet weak var actionView: UIView!
+    @IBOutlet weak var editOverlay: UIImageView!
+    @IBOutlet weak var cancelEdit: UIButton!
     
     @IBOutlet weak var valuesStack: UIStackView!
     @IBOutlet weak var inputStack: UIStackView!
@@ -44,6 +45,9 @@ class UserSettingsProfileVC: UIViewController {
             setValueAndColor(value: currentUser.displayName, label: displayName)
             setValueAndColor(value: currentUser.phoneNumber, label: phone)
             setValueAndColor(value: currentUser.email, label: email)
+            // rotate plus icon to be an x
+            cancelEdit.transform = CGAffineTransform(rotationAngle: 0.7853981634)
+            cancelEdit.isHidden = true
         } else {
             // make sure the cached user is not nil here, otherwise logout
             return performSegue(withIdentifier: logoutSegue, sender: self)
@@ -157,5 +161,9 @@ class UserSettingsProfileVC: UIViewController {
 //                }
             }
         }
+    }
+    
+    @IBAction func handleEditCancel(_ sender: Any) {
+//        switchView(btn: nil)
     }
 }
