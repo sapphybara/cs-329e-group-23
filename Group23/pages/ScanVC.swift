@@ -347,17 +347,100 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
 extension ScanVC:PHPickerViewControllerDelegate {
 	func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
 		dismiss(animated: true)
+		var UIImageArray: [UIImage] = []
 		let itemProviders = results.map(\.itemProvider)
+		var imageCounter = 0
+		var imagesLength = itemProviders.count
 		for item in itemProviders {
 			if item.canLoadObject(ofClass: UIImage.self) {
 				item.loadObject(ofClass: UIImage.self) { (image, error) in
-					DispatchQueue.main.async {
-						if let image = image as? UIImage {
-							self.imageArray.append(image)
-							print(self.imageArray)
+					if let image = image as? UIImage {
+						UIImageArray.append(image)
+						print("inner: \(UIImageArray)")
+						
+						imageCounter += 1
+						if imageCounter == imagesLength {
+							self.makePDF(UIImageArray)
 						}
 					}
 				}
+			}
+		}
+	}
+	
+	func makePDF(_ UIImages: [UIImage]) {
+		// Multithreading for PDF Scan Where Number Of Scans >= 1
+		DispatchQueue.main.async {
+			var pdfDocIDExternal: Int
+			
+			// Block of code below makes a file ID and makes sure that ID does not exist
+			func idMaker(pdfListCheck: [(PDFDocument, Int)]) -> Int {
+				var pdfDocID: Int
+				var idArray:[Int] = []
+				
+				for pdfFileIDs in pdfListCheck {
+					idArray.append(pdfFileIDs.1)
+				}
+				
+				// ID Generator
+				pdfDocID = Int.random(in: 0..<100000)
+				
+				if idArray.contains(pdfDocID) {
+					while idArray.contains(pdfDocID) {
+						print("\nID \(pdfDocID) Is Already In Use, Generating New PDF File ID\n")
+						pdfDocID = Int.random(in: 0..<100000)
+					}
+				}
+				
+				print("\nNew PDF Document Has An ID of \(pdfDocID)")
+				return pdfDocID
+			}
+			
+			// PDF file or PDF document instantiation
+			let pdfDocumentInstance = PDFDocument()
+			
+			for pageNum in 0..<UIImages.count {
+				let image: UIImage = UIImages[pageNum]
+				print("image: \(image)") // for debug only
+				
+				let pdfPage = PDFPage(image: image)
+				pdfDocumentInstance.insert(pdfPage!, at: pageNum)
+				
+				self.imageArray.append(image)
+				
+			}
+			
+			// make a document id for server side data management
+			pdfDocIDExternal = idMaker(pdfListCheck: pdfStoredObjects)
+			
+			// upload data to server - this works and has been tested and verified
+			self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal)
+			
+			// retrieval does not work yet
+			// retreive data from server for synchronized file management for global lists to use in HomeVC
+//            listPDFDocuments = self.serverUserFilesDataRetrieval() // Commented out For Home VC Dev
+			self.serverUserFilesDataRetrieval() // Test
+//            print("\nCount Check 1: \(listPDFDocuments.count)\n")
+			
+			// global lists to use in HomeVC
+			listPDFDocuments.append(pdfDocumentInstance)
+			print("\nCount Check 2: \(listPDFDocuments.count)\n")
+			
+			listPDFThumbnails.append(generatePDFThumbnail(currentpdf: listPDFDocuments.last!))
+			
+			self.dismiss(animated: true)
+			
+			// Debug Prints
+//            print("imageArray: \(self.imageArray)")
+			
+			//print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(self.imageArray.count)\n\n")
+			print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(listPDFDocuments.count)\n\n")
+			
+			//function to turn pdf into thumbnail image
+			func generatePDFThumbnail(currentpdf: PDFDocument) -> UIImage {
+				let pdfDocumentCover = currentpdf.page(at: 0)
+				let thumbnailSize = CGSize(width: 130, height: 200)
+				return (pdfDocumentCover?.thumbnail(of: thumbnailSize, for: .mediaBox))!
 			}
 		}
 	}
