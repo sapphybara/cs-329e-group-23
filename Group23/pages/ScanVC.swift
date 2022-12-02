@@ -91,46 +91,7 @@ class ScanVC: UIViewController {
 
 	// MARK: - Library Upload
 	@IBAction func libraryButtonPressed(_ sender: UIButton) {
-//		TODO: Upload Files
-		let actionSheetAlertController = UIAlertController(
-			title: "Select Location",
-			message: "Select where to upload from:",
-			preferredStyle: .actionSheet
-		)
-		
-		let photoLibraryAction = UIAlertAction(
-			title: "Photo Library",
-			style: .default,
-			handler: {
-				(action) in 
-				print("\(action.title!) action")
-				self.showPicker()
-			}
-		)
-		actionSheetAlertController.addAction(photoLibraryAction)
-		
-		let fileSystemAction = UIAlertAction(
-			title: "File System",
-			style: .default,
-			handler: {
-				(action) in 
-				print("\(action.title!) action")
-			}
-		)
-		actionSheetAlertController.addAction(fileSystemAction)
-		
-		let cancelAction = UIAlertAction(
-			title: "Cancel",
-			style: .cancel,
-			handler: {
-				(action) in 
-				print("\(action.title!) action")
-			}
-		)
-		actionSheetAlertController.addAction(cancelAction)
-		
-		present(actionSheetAlertController, animated: true)
-		
+		self.showPicker()
 	}
 	
 	private func showPicker() {
@@ -372,7 +333,7 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
             }
         }
 
-//		Add this to self.dismiss() reload table/collection data after adding to imageArray
+//		Add this to self.dismiss() to reload table/collection data after adding to imageArray
 //		{
 //			DispatchQueue.main.async {
 //				self.myCollectionOrTableView.reloadData()
