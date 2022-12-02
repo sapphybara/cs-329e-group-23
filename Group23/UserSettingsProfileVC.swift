@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseAuth
 
-class UserSettingsProfileVC: UIViewController {
+class UserSettingsProfileVC: UIViewController, UITextFieldDelegate {
     
     let logoutSegue = "logoutSegue"
     let containerSegue = "tableSegue"
@@ -52,7 +52,12 @@ class UserSettingsProfileVC: UIViewController {
             // make sure the cached user is not nil here, otherwise logout
             return performSegue(withIdentifier: logoutSegue, sender: self)
         }
-        
+		
+		for fieldView in inputStack.arrangedSubviews {
+			if let txtField = fieldView as? UITextField {
+				txtField.delegate = self
+			}
+		}
     }
     
     /// sets the value of the user's metadata, as well as text color depending on status
@@ -168,4 +173,15 @@ class UserSettingsProfileVC: UIViewController {
     @IBAction func handleEditCancel(_ sender: Any) {
 //        switchView(btn: nil)
     }
+	
+	/// Called when 'return' key pressed
+   func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+	   textField.resignFirstResponder()
+	   return true
+   }
+   
+   /// Called when the user clicks on the view outside of the UITextField
+   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+	   self.view.endEditing(true)
+   }
 }
