@@ -6,8 +6,6 @@
 //
 
 import UIKit
-//import FirebaseCore
-//import FirebaseFirestore
 import FirebaseAuth
 
 class ViewController: UITabBarController, UITabBarControllerDelegate {
@@ -17,11 +15,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate {
         super.viewDidLoad()
         
         delegate = self
-    
-        // Testing To See If Below Is Junk, Do Not Touch - SL
-//        if FirebaseApp.app() == nil {
-//            FirebaseApp.configure()
-//        }
     }
     
     // disables login screen presentation on second tap of profile tab element

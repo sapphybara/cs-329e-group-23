@@ -10,7 +10,10 @@ import PDFKit
 
 class FullPdfVC: UIViewController {
 
+    @IBOutlet weak var uiInteraction: UINavigationItem!
+    
     var currentPDF: PDFDocument?
+    var currentPDFFileName: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,10 +27,28 @@ class FullPdfVC: UIViewController {
 
         pdfView.document = currentPDF
         //pdfView.contentMode
-        // Do any additional setup after loading the view.
+        
+        uiInteraction.title = currentPDFFileName
     }
-       
     
     
-
+    @IBAction func deleteIndividualFile(_ sender: Any) {
+        let controller = UIAlertController(
+            title: "Delete File",
+            message: "Do You Want To Delete \(currentPDFFileName)?",
+            preferredStyle: .alert)
+        
+        controller.addAction(UIAlertAction(
+            title: "Cancel",
+            style: .cancel))
+        
+        controller.addAction(UIAlertAction(
+            title: "Delete PDF File",
+            style: .destructive,
+            handler: {_ in
+//                CODE
+            }))
+        
+        present(controller, animated: true)
+    }
 }

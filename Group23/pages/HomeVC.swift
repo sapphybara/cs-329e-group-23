@@ -38,20 +38,13 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         // Do any additional setup after loading the view.
     }
     
-//    // Need to show data on start up -- Need help here, not sure how to do this immediately after application launches
-//    override func viewWillAppear(_ animated: Bool) {
-//        // Retrieve server data, and reloadData
-//        serverUserFilesDataRetrieval()
-//        self.collectionView.reloadData()
-//    }
-    
     override func viewDidAppear(_ animated: Bool) {
         print("-HOME VC CHECK- pdfObjectCheck: \(pdfStoredObjects.count)-")
         
         // This function shows data
         func showData() {
             if pdfStoredObjects.count != 0{
-                scansLabel.text = "Your PDFs"
+                scansLabel.text = "Here Are Your Available PDF Files"
             }
             print("number of scans \(pdfStoredObjects.count)")
             //        print(listPDFThumbnails)
@@ -74,6 +67,8 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         } else if scanOrUpload == false && loadServerData == true {
             // block says, if file has not been scanned or uploaded, and server data has not been loaded locally
             // then load server data once with an array check to mitigate copies (start up procedure)
+            
+            // WARREN USE THIS BLANK SPACE FOR animation
             
             // This line retrieves server data in background
             serverUserFilesDataRetrieval()
@@ -129,8 +124,10 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             let finalIndexPathArray = Array(selectedIndex)
             let finalIndexPath = finalIndexPathArray.last
             let finalIndex = Int((finalIndexPath?.last!)!)
-            print(finalIndex)
+//            print(finalIndex)
             
+            let pdfDocumentBundle = pdfStoredObjects[finalIndex]
+            let pdfDocumentID = pdfDocumentBundle.1
             var pdfDocument: [PDFDocument] = []
             
             for pdfObject in pdfStoredObjects {
@@ -138,6 +135,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             }
             
             destination.currentPDF = pdfDocument[finalIndex]
+            destination.currentPDFFileName = "File_\(pdfDocumentID).pdf"
         }
     }
     
