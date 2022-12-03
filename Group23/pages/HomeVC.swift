@@ -39,20 +39,56 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         // Do any additional setup after loading the view.
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        
-//        // This line block of code is just for testing the retreival function
+//    // Need to show data on start up -- Need help here, not sure how to do this immediately after application launches
+//    override func viewWillAppear(_ animated: Bool) {
+//        // Retrieve server data, and reloadData
 //        serverUserFilesDataRetrieval()
-        
-        if listPDFDocuments.count != 0{
-            scansLabel.text = "Your PDFs"
+//        self.collectionView.reloadData()
+//    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        // This function shows data
+        func showData() {
+            if listPDFDocuments.count != 0{
+                scansLabel.text = "Your PDFs"
+            }
+            //        print(listPDFDocuments)
+            print("number of scans \(listPDFDocuments.count)")
+            //        print(listPDFThumbnails)
+            //        print(listPDFThumbnails.count)
+            self.collectionView.reloadData()
         }
-//        print(listPDFDocuments)
-        print("number of scans \(listPDFDocuments.count)")
-//        print(listPDFThumbnails)
-//        print(listPDFThumbnails.count)
-        self.collectionView.reloadData()
         
+        if scanOrUpload == true && loadServerData == true {
+            // block says, if file has been scanned or uploaded, reload the server data (add data procedure)
+            
+            // This line retrieves server data in background
+            serverUserFilesDataRetrieval()
+            
+            print("\nTHROWING SERVER DATA TO HOMEVC, CASE 1\n")
+            
+            showData()
+            
+            scanOrUpload = false
+            loadServerData = false
+        } else if scanOrUpload == false && loadServerData == true {
+            // block says, if file has not been scanned or uploaded, and server data has not been loaded locally
+            // then load server data once with an array check to mitigate copies (start up procedure)
+            
+            // This line retrieves server data in background
+            serverUserFilesDataRetrieval()
+            
+            print("\nTHROWING SERVER DATA TO HOMEVC, CASE 2\n")
+            
+            showData()
+            
+            loadServerData = false
+        } else {
+            // block says, if file has not been scanned or uploaded, and server data has been loaded locally
+            // just show locally loaded data, not need to make a server request (navigation procedure)
+            print("\nNO DATA HAS BEEN SCANNED, JUST SHOW DATA\n")
+            showData()
+        }
     }
     
     @IBAction func helpButtonPressed(_ sender: Any) {

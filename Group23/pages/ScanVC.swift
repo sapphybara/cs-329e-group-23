@@ -14,13 +14,104 @@ import FirebaseAuth
 import FirebaseCore
 import FirebaseStorage // Addition for PDF File management - SL
 
+// global arrays needed for application functionality
 var listPDFDocuments: [PDFDocument] = []
 var listPDFThumbnails: [UIImage] = []
 var pdfStoredObjects: [(PDFDocument, Int)] = []
 
+// switches to load/reload data globally
+var scanOrUpload = false
+var loadServerData = true
+
 // firebase db storage setup
 private let storageRef = Storage.storage(url:"gs://final-project-group-23.appspot.com/").reference()
-//private let urlString = "gs://final-project-group-23.appspot.com/"
+
+// This function retrives all server data created by the user
+func serverUserFilesDataRetrieval() {
+    
+    let dbUserFilesRef = storageRef.child("userFiles")
+    
+    print("\nGetting List of all stored server files.")
+    
+    dbUserFilesRef.listAll{ (result, error) in
+        if let error = error {
+            print("\nWARNING: ERROR IN RETREIVING DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
+        } else {
+            
+            print("\nRetrieving DB Data...")
+            
+            // this retreives pdfdocuments and file id's from originally given name
+            if result.items.count > 0 {
+                for item in result.items {
+                    // get original file id from server-stored name
+                    let strIDNameSearch = String(item.name)
+                    let firstIndex = strIDNameSearch.firstIndex(of: "_")
+                    let firstIndexOneOver = strIDNameSearch.index(after: firstIndex!)
+                    let secondIndex = strIDNameSearch.lastIndex(of: ".")
+                    let range = firstIndexOneOver..<secondIndex!
+                    let tempFileID = Int(strIDNameSearch[range])!
+                    
+                    
+                    // testing below
+                    // if items are already in the listPDFDocuments Array, skip readdition
+//                    if listPDFDocuments.count > 0 {
+//                        for pdfItem in listPDFDocuments {
+//                            if strIDNameSearch == pdfItem.name
+//                        }
+//                    }
+                    
+                    for pdfItem in listPDFDocuments {
+                        print("CHECKING THIS NOW: \(String(describing: pdfItem.documentAttributes!["Title"]))")
+                    }
+                    
+                    // testing above
+                    
+                    
+                    // get pdf document from server
+                    let path = dbUserFilesRef.child("\(strIDNameSearch)")
+                    
+                        // maxSize is maxSize of INT 64 for swift, just to play it safe
+                        path.getData(maxSize: 9223372036854775807) { (data, error) -> Void in
+                            print("Getting File...")
+
+                            let bytemanager = Data(data!)
+                            
+                            let pdfFileItem = PDFDocument(data: (bytemanager as NSData) as Data)
+                            
+//                            print(pdfFileItem!)
+
+                            let pdfFileOut = pdfFileItem!
+
+                            print("pdfFileOut: \(pdfFileOut)")
+
+                            // pdf tuple array for file management on UI and server side
+                            pdfStoredObjects.append((pdfFileOut, tempFileID))
+
+                            // pdf array for quick UI use access
+                            listPDFDocuments.append(pdfFileItem!)
+                            
+                            // regenerate all thumbnails once the data is loaded in
+                            listPDFThumbnails.append(generatePDFThumbnail(currentpdf: listPDFDocuments.last!))
+                        }
+                    
+                        print("CHECK IN PDF STORED OBJECTS: \(pdfStoredObjects.count)")
+                    
+                    print("pdfDocument Retreival Path: \(path)")
+                    print("fileID Retrieved = \"\(tempFileID)\"\n")
+                }
+            } else {
+                print("\nNo Files Stored In Server DB...")
+            }
+        }
+    }
+}
+
+//function to turn pdf into thumbnail image
+func generatePDFThumbnail(currentpdf: PDFDocument) -> UIImage {
+    let pdfDocumentCover = currentpdf.page(at: 0)
+    let thumbnailSize = CGSize(width: 130, height: 200)
+    return (pdfDocumentCover?.thumbnail(of: thumbnailSize, for: .mediaBox))!
+}
 
 class ScanVC: UIViewController {
 	
@@ -99,101 +190,6 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
         _ = pdfRef.putData(pdfDocument.dataRepresentation()!, metadata: nil)
     }
     
-    // In development
-    // This function retreives data from server
-//    func serverUserFilesDataRetrieval() -> [PDFDocument] { // Original Header
-    func serverUserFilesDataRetrieval() { // Test Header
-        let dbUserFilesRef = storageRef.child("userFiles")
-//        let urlStringFirstChild = urlString + "userFiles"
-//        var listPDFDocumentsInternal: [PDFDocument] = []
-        
-        print("\nGetting List of all stored server files.")
-        
-        dbUserFilesRef.listAll{ (result, error) in
-            if let error = error {
-                print("\nWARNING: ERROR IN RETREIVING DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
-            } else {
-                
-                print("\nRetrieving DB Data...")
-                
-                // this retreives pdfdocuments and file id's from originally given name
-                if result.items.count > 0 {
-                    for item in result.items {
-                        // get original file id from server-stored name
-                        let strIDNameSearch = String(item.name)
-                        let firstIndex = strIDNameSearch.firstIndex(of: "_")
-                        let firstIndexOneOver = strIDNameSearch.index(after: firstIndex!)
-                        let secondIndex = strIDNameSearch.lastIndex(of: ".")
-                        let range = firstIndexOneOver..<secondIndex!
-                        let tempFileID = Int(strIDNameSearch[range])!
-                        
-                        // get pdf document from server
-                        let path = dbUserFilesRef.child("\(strIDNameSearch)")
-                        // Failed attempt
-//                        let tempServerFileNode = "\(urlStringFirstChild)/\(strIDNameSearch)"
-//
-//                        let filePath = URL(string: tempServerFileNode)
-//
-//                        print(tempServerFileNode)
-//
-//                        let pdfFileItem = try? Data.init(contentsOf: filePath!)
-//
-//                        print(pdfFileItem!)
-                        
-                        // Error below, current uncommented code makes a pdfdocument in memory and assigns it to a variable but cannot be put into the global array for some reason and other simliar attempts returned a nil/empty array for Home VC
-                        
-                        // maxSize is maxSize of INT 64 for swift, just to play it safe
-                        path.getData(maxSize: 9223372036854775807) { (data, error) -> Void in
-                            print("Getting File...")
-                            
-//                            let pdfFileItem = PDFDocument()
-                            
-                            let bytemanager = Data(data!)
-//
-//                            print("Bytemanager Check: \(bytemanager as NSData)")
-//
-                            let pdfFileItem = PDFDocument(data: (bytemanager as NSData) as Data)
-//
-                            print(pdfFileItem!)
-                            
-                            let pdfFileOut = pdfFileItem!
-                            
-                            print("pdfFileOut: \(pdfFileOut)")
-                            
-//                            bytemanager.write(to: pdfFileItem)
-                            
-//                            let pdfFileItem = PDFDocument(data: data)
-                            
-//                            print("PDFFileSize: \(String(describing: pdfFileItem.dataRepresentation()))")
-                            
-                            // pdf tuple array for file management on UI and server side
-                            pdfStoredObjects.append((pdfFileOut, tempFileID))
-                            
-//                            // pdf array for quick UI use access
-//                            listPDFDocuments.append(pdfFileItem!)
-                        }
-                        
-                        print("CHECK IN PDF STORED OBJECTS: \(pdfStoredObjects.count)")
-                        
-    //                    downloadTask.observeStatus(.Resume) { (snapshot) -> Void in
-    //                          print("Downloading has started")
-    //
-    //
-    //                      }
-                        
-                        print("pdfDocument Retreival Path: \(path)")
-                        print("fileID Retrieved = \"\(tempFileID)\"\n")
-                    }
-                } else {
-                    print("\nNo Files Stored In Server DB...")
-                }
-            }
-        }
-//        return listPDFDocumentsInternal
-    }
-    
-    
-    
 	func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
         
         // If there are no pdf scans then proceed with else
@@ -249,12 +245,6 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
             // upload data to server - this works and has been tested and verified
             self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal)
             
-            // retrieval does not work yet
-            // retreive data from server for synchronized file management for global lists to use in HomeVC
-//            listPDFDocuments = self.serverUserFilesDataRetrieval() // Commented out For Home VC Dev
-            self.serverUserFilesDataRetrieval() // Test
-//            print("\nCount Check 1: \(listPDFDocuments.count)\n")
-            
             // global lists to use in HomeVC
             listPDFDocuments.append(pdfDocumentInstance)
             print("\nCount Check 2: \(listPDFDocuments.count)\n")
@@ -269,12 +259,9 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
             //print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(self.imageArray.count)\n\n")
             print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(listPDFDocuments.count)\n\n")
             
-            //function to turn pdf into thumbnail image
-            func generatePDFThumbnail(currentpdf: PDFDocument) -> UIImage {
-                let pdfDocumentCover = currentpdf.page(at: 0)
-                let thumbnailSize = CGSize(width: 130, height: 200)
-                return (pdfDocumentCover?.thumbnail(of: thumbnailSize, for: .mediaBox))!
-            }
+            // switch required to keep track of loading data to HomeVC
+            scanOrUpload = true
+            loadServerData = true
         }
 
 //		Add this to self.dismiss() to reload table/collection data after adding to imageArray
@@ -360,12 +347,6 @@ extension ScanVC:PHPickerViewControllerDelegate {
 			// upload data to server - this works and has been tested and verified
 			self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal)
 			
-			// retrieval does not work yet
-			// retreive data from server for synchronized file management for global lists to use in HomeVC
-//            listPDFDocuments = self.serverUserFilesDataRetrieval() // Commented out For Home VC Dev
-			self.serverUserFilesDataRetrieval() // Test
-//            print("\nCount Check 1: \(listPDFDocuments.count)\n")
-			
 			// global lists to use in HomeVC
 			listPDFDocuments.append(pdfDocumentInstance)
 			print("\nCount Check 2: \(listPDFDocuments.count)\n")
@@ -379,13 +360,9 @@ extension ScanVC:PHPickerViewControllerDelegate {
 			
 			//print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(self.imageArray.count)\n\n")
 			print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(listPDFDocuments.count)\n\n")
-			
-			//function to turn pdf into thumbnail image
-			func generatePDFThumbnail(currentpdf: PDFDocument) -> UIImage {
-				let pdfDocumentCover = currentpdf.page(at: 0)
-				let thumbnailSize = CGSize(width: 130, height: 200)
-				return (pdfDocumentCover?.thumbnail(of: thumbnailSize, for: .mediaBox))!
-			}
+            
+            scanOrUpload = true
+            loadServerData = true
 		}
 	}
 }
