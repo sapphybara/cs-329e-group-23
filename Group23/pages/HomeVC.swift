@@ -35,7 +35,6 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         //        let fileURL = Bundle.main.url(forResource: "sample-scan-1", withExtension: "pdf")
         //        pdfView.document = PDFDocument(url: fileURL!)
 
-        
         // Do any additional setup after loading the view.
     }
     
@@ -47,13 +46,14 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
 //    }
     
     override func viewDidAppear(_ animated: Bool) {
+        print("-HOME VC CHECK- pdfObjectCheck: \(pdfStoredObjects.count)-")
+        
         // This function shows data
         func showData() {
-            if listPDFDocuments.count != 0{
+            if pdfStoredObjects.count != 0{
                 scansLabel.text = "Your PDFs"
             }
-            //        print(listPDFDocuments)
-            print("number of scans \(listPDFDocuments.count)")
+            print("number of scans \(pdfStoredObjects.count)")
             //        print(listPDFThumbnails)
             //        print(listPDFThumbnails.count)
             self.collectionView.reloadData()
@@ -86,6 +86,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         } else {
             // block says, if file has not been scanned or uploaded, and server data has been loaded locally
             // just show locally loaded data, not need to make a server request (navigation procedure)
+            
             print("\nNO DATA HAS BEEN SCANNED, JUST SHOW DATA\n")
             showData()
         }
@@ -104,7 +105,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        listPDFDocuments.count
+        pdfStoredObjects.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -129,7 +130,14 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             let finalIndexPath = finalIndexPathArray.last
             let finalIndex = Int((finalIndexPath?.last!)!)
             print(finalIndex)
-            destination.currentPDF = listPDFDocuments[finalIndex]
+            
+            var pdfDocument: [PDFDocument] = []
+            
+            for pdfObject in pdfStoredObjects {
+                pdfDocument.append(pdfObject.0)
+            }
+            
+            destination.currentPDF = pdfDocument[finalIndex]
         }
     }
     

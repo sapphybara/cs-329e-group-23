@@ -15,7 +15,6 @@ import FirebaseCore
 import FirebaseStorage // Addition for PDF File management - SL
 
 // global arrays needed for application functionality
-var listPDFDocuments: [PDFDocument] = []
 var listPDFThumbnails: [UIImage] = []
 var pdfStoredObjects: [(PDFDocument, Int)] = []
 
@@ -28,7 +27,7 @@ private let storageRef = Storage.storage(url:"gs://final-project-group-23.appspo
 
 // This function retrives all server data created by the user
 func serverUserFilesDataRetrieval() {
-    
+    // server bucket reference
     let dbUserFilesRef = storageRef.child("userFiles")
     
     print("\nGetting List of all stored server files.")
@@ -40,7 +39,14 @@ func serverUserFilesDataRetrieval() {
             
             print("\nRetrieving DB Data...")
             
-            // this retreives pdfdocuments and file id's from originally given name
+            var dataCheckArray: [Int] = []
+            
+            // array to check and not add duplicate objects
+            for itemCheck in pdfStoredObjects {
+                dataCheckArray.append(itemCheck.1)
+            }
+            
+            // this retreives all pdfdocuments from server side and file id's from original file names
             if result.items.count > 0 {
                 for item in result.items {
                     // get original file id from server-stored name
@@ -51,53 +57,43 @@ func serverUserFilesDataRetrieval() {
                     let range = firstIndexOneOver..<secondIndex!
                     let tempFileID = Int(strIDNameSearch[range])!
                     
-                    
-                    // testing below
-                    // if items are already in the listPDFDocuments Array, skip readdition
-//                    if listPDFDocuments.count > 0 {
-//                        for pdfItem in listPDFDocuments {
-//                            if strIDNameSearch == pdfItem.name
-//                        }
-//                    }
-                    
-                    for pdfItem in listPDFDocuments {
-                        print("CHECKING THIS NOW: \(String(describing: pdfItem.documentAttributes!["Title"]))")
-                    }
-                    
-                    // testing above
-                    
-                    
-                    // get pdf document from server
-                    let path = dbUserFilesRef.child("\(strIDNameSearch)")
-                    
+                    print("-Attempting to add file with ID: \(tempFileID)-")
+                    // if items are already in the listPDFDocuments Array, skip readdition, otherwise add data to global array
+                    if dataCheckArray.contains(tempFileID) {
+                        print("-DUPLICATE ID FOUND: FILE WITH ID \"\(tempFileID)\" WAS SKIPPED-")
+                    } else {
+                        // get pdf document from server
+                        let path = dbUserFilesRef.child("\(strIDNameSearch)")
+                        
                         // maxSize is maxSize of INT 64 for swift, just to play it safe
                         path.getData(maxSize: 9223372036854775807) { (data, error) -> Void in
                             print("Getting File...")
-
+                            
                             let bytemanager = Data(data!)
                             
                             let pdfFileItem = PDFDocument(data: (bytemanager as NSData) as Data)
                             
 //                            print(pdfFileItem!)
-
+                            
                             let pdfFileOut = pdfFileItem!
-
+                            
                             print("pdfFileOut: \(pdfFileOut)")
-
+                            
                             // pdf tuple array for file management on UI and server side
                             pdfStoredObjects.append((pdfFileOut, tempFileID))
-
-                            // pdf array for quick UI use access
-                            listPDFDocuments.append(pdfFileItem!)
                             
                             // regenerate all thumbnails once the data is loaded in
-                            listPDFThumbnails.append(generatePDFThumbnail(currentpdf: listPDFDocuments.last!))
+                            var tempList: [PDFDocument] = []
+                            
+                            tempList.append(pdfFileOut)
+                            
+                            listPDFThumbnails.append(generatePDFThumbnail(currentpdf: tempList.last!))
                         }
-                    
+                        
                         print("CHECK IN PDF STORED OBJECTS: \(pdfStoredObjects.count)")
-                    
-                    print("pdfDocument Retreival Path: \(path)")
-                    print("fileID Retrieved = \"\(tempFileID)\"\n")
+                        print("pdfDocument Retreival Path: \(path)")
+                        print("fileID Retrieved = \"\(tempFileID)\"\n")
+                    }
                 }
             } else {
                 print("\nNo Files Stored In Server DB...")
@@ -236,7 +232,6 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
                 pdfDocumentInstance.insert(pdfPage!, at: pageNum)
                 
                 self.imageArray.append(image)
-                
             }
             
             // make a document id for server side data management
@@ -245,11 +240,15 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
             // upload data to server - this works and has been tested and verified
             self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal)
             
-            // global lists to use in HomeVC
-            listPDFDocuments.append(pdfDocumentInstance)
-            print("\nCount Check 2: \(listPDFDocuments.count)\n")
+            // global list to use in HomeVC
+            pdfStoredObjects.append((pdfDocumentInstance, pdfDocIDExternal))
             
-            listPDFThumbnails.append(generatePDFThumbnail(currentpdf: listPDFDocuments.last!))
+            // temporary list just for thumbnail use for front end display
+            var tempList: [PDFDocument] = []
+            
+            tempList.append(pdfDocumentInstance)
+            
+            listPDFThumbnails.append(generatePDFThumbnail(currentpdf: tempList.last!))
             
             self.dismiss(animated: true)
             
@@ -257,7 +256,7 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
 //            print("imageArray: \(self.imageArray)")
             
             //print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(self.imageArray.count)\n\n")
-            print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(listPDFDocuments.count)\n\n")
+            print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(pdfStoredObjects.count)\n\n")
             
             // switch required to keep track of loading data to HomeVC
             scanOrUpload = true
@@ -347,11 +346,15 @@ extension ScanVC:PHPickerViewControllerDelegate {
 			// upload data to server - this works and has been tested and verified
 			self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal)
 			
-			// global lists to use in HomeVC
-			listPDFDocuments.append(pdfDocumentInstance)
-			print("\nCount Check 2: \(listPDFDocuments.count)\n")
-			
-			listPDFThumbnails.append(generatePDFThumbnail(currentpdf: listPDFDocuments.last!))
+			// global list to use in HomeVC
+            pdfStoredObjects.append((pdfDocumentInstance, pdfDocIDExternal))
+            
+            // temporary list just for thumbnail use for front end display
+            var tempList: [PDFDocument] = []
+            
+            tempList.append(pdfDocumentInstance)
+            
+            listPDFThumbnails.append(generatePDFThumbnail(currentpdf: tempList.last!))
 			
 			self.dismiss(animated: true)
 			
@@ -359,7 +362,7 @@ extension ScanVC:PHPickerViewControllerDelegate {
 //            print("imageArray: \(self.imageArray)")
 			
 			//print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(self.imageArray.count)\n\n")
-			print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(listPDFDocuments.count)\n\n")
+			print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(pdfStoredObjects.count)\n\n")
             
             scanOrUpload = true
             loadServerData = true
