@@ -112,13 +112,17 @@ class UserSettingsProfileVC: UIViewController, UITextFieldDelegate {
                         if i == 1 {
                             wasInputValid = phonePred.evaluate(with: textToUpdate)
                         } else if i == 2 {
-                            wasInputValid = emailPred.evaluate(with: textToUpdate)
+                            
+                            // todo email &/or email? (in message)
+                            
+                            if textToUpdate.isEmpty {
+                                message = "Input for email cannot be empty"
+                                wasInputValid = false
+                            } else {
+                                wasInputValid = emailPred.evaluate(with: textToUpdate)
+                            }
                         }
                         
-                        if textToUpdate.isEmpty {
-                            message = "Input for \(attributes[i]) cannot be empty"
-                            wasInputValid = false
-                        }
                         
                         if let currentValue = valuesStack.arrangedSubviews[i] as? UILabel {
                             if textToUpdate == currentValue.text {
