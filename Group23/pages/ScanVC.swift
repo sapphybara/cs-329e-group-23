@@ -7,18 +7,16 @@
 
 import UIKit
 import VisionKit
-import Photos // needed?
 import PhotosUI
 import PDFKit
 import FirebaseAuth
-import FirebaseCore
 import FirebaseStorage
 
 // global arrays needed for application functionality
 var listPDFThumbnails: [(UIImage, Int)] = []
 var pdfStoredObjects: [(PDFDocument, Int)] = []
 
-// switches to load/reload data globally
+// switches to load/reload logged-in user data globally
 var scanOrUpload = false
 var loadServerData = true
 
@@ -296,7 +294,7 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
         
         print("\nUploading Instantiated Document...")
         
-        // Upload the file to the path "images/rivers.jpg"
+        // Upload user data to the appropriate server location for the appropriate user
         _ = pdfRef.putData(pdfDocument.dataRepresentation()!, metadata: nil)
     }
     

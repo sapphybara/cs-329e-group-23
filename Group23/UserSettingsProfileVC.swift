@@ -7,6 +7,120 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseStorage
+
+// WARREN USE THIS DATA STRUCTURE TO UPLOAD UIIMAGES TO SERVER, profileImageID WILL BE AUTOMATICALLY MADE
+// THE ID CAN BE USED TO DISPLAY IMAGE NAME IN THE FOLLOWING FORMAT:
+//"Image_\(profileImageDataStructure[0].1).jpeg"
+// data structure required for the user profile image data management
+private var profileImageDataStructure: [(profileImage: UIImage, profileImageID: Int)] = []
+
+// firebase db storage setup
+private let storageRef = Storage.storage(url:"gs://final-project-group-23.appspot.com/").reference()
+
+// THIS NEEDS TESTING
+// This function uploads the profile image from device memory to the database for the logged-in user
+func serverFileUserImageUpload() {
+    // ID Generator
+    let imageID = Int.random(in: 0..<100000)
+    
+    profileImageDataStructure[0].1 = imageID
+    
+    let imageToUpload: Data = profileImageDataStructure[0].0.jpegData(compressionQuality: 0.1)!
+    
+    let imageRef = storageRef.child("userProfilePicture/\(activeUser)/Image_\(imageID).jpeg")
+    
+    print("\nUploading User Profile Image To Database...")
+    
+    // Upload user profile picture to the appropriate server location for the appropriate user
+    _ = imageRef.putData(imageToUpload, metadata: nil)
+    
+    print("\nUser \(activeUser)'s Profile Image Has Been Uploaded To The Database...")
+}
+
+// THIS NEEDS TESTING
+// This function retrieves the profile image from the database for the logged-in user
+func serverFileUserImageRetrieval() {
+    // server bucket reference for user profile data
+    let dbUserFilesRef = storageRef.child("userProfilePicture/\(activeUser)")
+    
+    print("\nGetting the profile picture for user: \(activeUser).")
+    
+    dbUserFilesRef.listAll{ (result, error) in
+        if let error = error {
+            print("\nWARNING: ERROR IN RETREIVING USER PROFILE IMAGE DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
+        } else {
+            
+            print("\nRetrieving DB Profile User Image Data...")
+            
+            // this retreives all profile images from server side and file id's from original file names, although there should always only be one stored in the database. Therefore only get the 0th element in the database
+            if result.items.count > 0 {
+                for item in result.items {
+                    // get original file id from server-stored file name
+                    let strIDNameSearch = String(item.name)
+                    let firstIndex = strIDNameSearch.firstIndex(of: "_")
+                    let firstIndexOneOver = strIDNameSearch.index(after: firstIndex!)
+                    let secondIndex = strIDNameSearch.lastIndex(of: ".")
+                    let range = firstIndexOneOver..<secondIndex!
+                    let tempFileID = Int(strIDNameSearch[range])!
+                    
+                    print("-Attempting to retrieve user profile image with ID: \(tempFileID)-")
+
+                    let path = dbUserFilesRef.child("\(strIDNameSearch)")
+                    
+                    // maxSize is maxSize of INT 64 for swift, just to play it safe
+                    path.getData(maxSize: 9223372036854775807) { (data, error) -> Void in
+                        print("Getting File...")
+                        
+                        let bytemanager = Data(data!)
+                        
+                        profileImageDataStructure[0].0 = UIImage(data: (bytemanager as NSData) as Data)!
+                    }
+                    
+                    profileImageDataStructure[0].1 = tempFileID
+                    
+                    print("User Profile Image Retreival Path: \(path)")
+                    print("Profile Image ID Retrieved = \"\(tempFileID)\"\n")
+                    
+                    // only get the first element in the database as there should only be one profile image per user
+                    break
+                }
+            } else {
+                print("\nNo User Profile Stored In Server DB...")
+            }
+        }
+    }
+}
+
+// THIS NEEDS TESTING
+// This function deletes the profile image from the database for the logged-in user
+func serverFileUserImageDeletion() {
+    DispatchQueue.global(qos: .default).async() {
+        // server bucket reference for user data
+        let dbUserFilesRef = storageRef.child("userProfilePicture/\(activeUser)")
+        
+        // make server delete request
+        if profileImageDataStructure[0].0.imageAsset != nil {
+            // server data deletion
+            let tempRefServerNode = dbUserFilesRef.child("Image_\(profileImageDataStructure[0].1).jpeg")
+            tempRefServerNode.delete { (error) in
+                if let error = error {
+                    print("\nWARNING: THERE WAS AN ERROR IN DELETING YOUR USER PROFILE IMAGE DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
+                } else {
+                    print("~Image_\(profileImageDataStructure[0].1).jpeg Was Successfully Deleted On The Server Side~")
+                }
+            }
+            
+            // sync deleted server user profile image objects with locally stored objects in memory
+            DispatchQueue.global(qos: .userInitiated).async() {
+                DispatchQueue.main.async {
+                    profileImageDataStructure.remove(at: 0)
+                    print("PROFILE IMAGE DATA STRUCTURE CHECK: \(profileImageDataStructure)")
+                }
+            }
+        }
+    }
+}
 
 class UserSettingsProfileVC: UIViewController, UITextFieldDelegate {
     
@@ -78,6 +192,15 @@ class UserSettingsProfileVC: UIViewController, UITextFieldDelegate {
         profileImage.layer.cornerRadius = profileImage.frame.height / 2
         profileImage.layer.masksToBounds = false
         profileImage.clipsToBounds = true
+        
+        // WARREN THERE IS AN ISSUE HERE, IF THIS IS COMMENTED OUT, THE VC DOES NOT SEGUE AND PROGRAM BREAKS.
+        // THE CODE I WROTE SHOULD WORK, AS THAT IS THE METHOD I USED TO SYNC ALL USER DATA
+        // IT MUST BE A BUG WITH THE STORYBOARD/VC SETUP
+//        // database server retrieval of user profile image
+//        activeUser = provideCurrentUser()
+//        serverFileUserImageRetrieval()
+//        print("CHECKING PROFILE IMAGE DATA STRUCTURE: \(profileImageDataStructure)")
+//        profileImage.image = profileImageDataStructure[0].0
     }
     
     // Logout Button Action
