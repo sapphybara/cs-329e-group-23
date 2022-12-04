@@ -8,6 +8,9 @@
 import UIKit
 import PDFKit
 
+// global array for file deletion from UI to server side, uses file IDs from file naming schema within application
+var filestToDelete: [Int] = []
+
 class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     @IBOutlet weak var scansLabel: UILabel!
@@ -82,7 +85,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             // block says, if file has not been scanned or uploaded, and server data has been loaded locally
             // just show locally loaded data, not need to make a server request (navigation procedure)
             
-            print("\nNO DATA HAS BEEN SCANNED, JUST SHOW DATA\n")
+            print("\nNO DATA HAS BEEN SCANNED, JUST DISPLAYING DATA\n")
             showData()
         }
     }
@@ -136,6 +139,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             
             destination.currentPDF = pdfDocument[finalIndex]
             destination.currentPDFFileName = "File_\(pdfDocumentID).pdf"
+            destination.pdfIDInternal = pdfDocumentID
         }
     }
     

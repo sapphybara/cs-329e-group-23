@@ -14,6 +14,7 @@ class FullPdfVC: UIViewController {
     
     var currentPDF: PDFDocument?
     var currentPDFFileName: String = ""
+    var pdfIDInternal: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,10 +29,11 @@ class FullPdfVC: UIViewController {
         pdfView.document = currentPDF
         //pdfView.contentMode
         
+        // title of file in display in single view mode
         uiInteraction.title = currentPDFFileName
     }
     
-    
+    // delete pdf file in single view mode
     @IBAction func deleteIndividualFile(_ sender: Any) {
         let controller = UIAlertController(
             title: "Delete File",
@@ -46,7 +48,14 @@ class FullPdfVC: UIViewController {
             title: "Delete PDF File",
             style: .destructive,
             handler: {_ in
-//                CODE
+                // delete data with request to server
+                filestToDelete.append(self.pdfIDInternal)
+                
+                // make request with server and delete file
+                deleteUserFiles(tempFileDeletionIDs: filestToDelete)
+                
+                // pop VC
+                self.navigationController?.popViewController(animated: true)
             }))
         
         present(controller, animated: true)

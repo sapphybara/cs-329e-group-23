@@ -27,7 +27,7 @@ private let storageRef = Storage.storage(url:"gs://final-project-group-23.appspo
 
 // This function retrives all server data created by the user
 func serverUserFilesDataRetrieval() {
-    // server bucket reference
+    // server bucket reference for user data
     let dbUserFilesRef = storageRef.child("userFiles")
     
     print("\nGetting List of all stored server files.")
@@ -102,7 +102,58 @@ func serverUserFilesDataRetrieval() {
     }
 }
 
-//function to turn pdf into thumbnail image
+// This function simultaneously deletes files from front end with back end
+func deleteUserFiles(tempFileDeletionIDs: [Int]) {
+    // server bucket reference for user data
+    let dbUserFilesRef = storageRef.child("userFiles")
+    
+    var pdfObjectsToDelete: [(PDFDocument, Int)] = []
+    
+    // get objects to delete from application
+    for pdfStoredObject in pdfStoredObjects {
+        if tempFileDeletionIDs.contains(pdfStoredObject.1) {
+            pdfObjectsToDelete.append(pdfStoredObject)
+        }
+    }
+    
+    // make server delete request
+    if pdfObjectsToDelete.count == 1 {
+        // server data deletion
+        let tempRefServerNode = dbUserFilesRef.child("File_\(pdfObjectsToDelete[0].1).pdf")
+        tempRefServerNode.delete { (error) in
+            if let error = error {
+                print("\nWARNING: THERE WAS AN ERROR IN DELETING YOUR DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
+            } else {
+                print("~File_\(pdfObjectsToDelete[0].1).pdf Was Successfully Deleted On The Server Side~")
+            }
+        }
+        
+        // local deletion
+        for pdfObjectToDelete in pdfObjectsToDelete {
+            pdfStoredObjects.removeAll(where: {$1 == pdfObjectToDelete.1})
+        }
+        
+    } else {
+        for itemToDelete in pdfObjectsToDelete {
+            let tempRefServerNode = dbUserFilesRef.child("File_\(itemToDelete.1).pdf")
+            
+            tempRefServerNode.delete { (error) in
+                if let error = error {
+                    print("\nWARNING: THERE WAS AN ERROR IN DELETING YOUR DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
+                } else {
+                    print("~File_\(itemToDelete.1).pdf Was Successfully Deleted On The Server Side~")
+                }
+            }
+        }
+        
+        // local deletion
+        for pdfObjectToDelete in pdfObjectsToDelete {
+            pdfStoredObjects.removeAll(where: {$1 == pdfObjectToDelete.1})
+        }
+    }
+}
+
+// This function turna a pdf object into a thumbnail image
 func generatePDFThumbnail(currentpdf: PDFDocument) -> UIImage {
     let pdfDocumentCover = currentpdf.page(at: 0)
     let thumbnailSize = CGSize(width: 130, height: 200)
@@ -273,7 +324,6 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
 	}
 }
 
-// Max can you explain what is happening in the code below and/or convert library image to PDFDocument objects?
 extension ScanVC:PHPickerViewControllerDelegate {
 	func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
 		dismiss(animated: true)
