@@ -32,7 +32,7 @@ func serverUserFilesDataRetrieval() {
     
     if activeUser != "Anonymous" {
         // server bucket reference for user data
-        let dbUserFilesRef = storageRef.child("userFiles")
+        let dbUserFilesRef = storageRef.child("userFiles/\(activeUser)")
         
         print("\nGetting List of all stored server files for user: \(activeUser).")
         
@@ -118,7 +118,7 @@ func deleteUserFiles(tempFileDeletionIDs: [Int]) {
     if activeUser != "Anonymous" {
         DispatchQueue.global(qos: .default).async() {
             // server bucket reference for user data
-            let dbUserFilesRef = storageRef.child("userFiles")
+            let dbUserFilesRef = storageRef.child("userFiles/\(activeUser)")
             
             var pdfObjectsToDelete: [(PDFDocument, Int)] = []
             
@@ -292,7 +292,7 @@ class ScanVC: UIViewController {
 extension ScanVC:VNDocumentCameraViewControllerDelegate {
     // This function uploads data to server
     func serverFileUpload(pdfDocument: PDFDocument, pdfID: Int) {
-        let pdfRef = storageRef.child("userFiles/File_\(pdfID).pdf")
+        let pdfRef = storageRef.child("userFiles/\(activeUser)/File_\(pdfID).pdf")
         
         print("\nUploading Instantiated Document...")
         
