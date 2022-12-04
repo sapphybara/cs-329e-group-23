@@ -15,7 +15,7 @@ import FirebaseCore
 import FirebaseStorage // Addition for PDF File management - SL
 
 // global arrays needed for application functionality
-var listPDFThumbnails: [UIImage] = []
+var listPDFThumbnails: [(UIImage, Int)] = []
 var pdfStoredObjects: [(PDFDocument, Int)] = []
 
 // switches to load/reload data globally
@@ -87,7 +87,7 @@ func serverUserFilesDataRetrieval() {
                             
                             tempList.append(pdfFileOut)
                             
-                            listPDFThumbnails.append(generatePDFThumbnail(currentpdf: tempList.last!))
+                            listPDFThumbnails.append(((generatePDFThumbnail(currentpdf: tempList.last!)), tempFileID))
                         }
                         
                         print("CHECK IN PDF STORED OBJECTS: \(pdfStoredObjects.count)")
@@ -104,60 +104,76 @@ func serverUserFilesDataRetrieval() {
 
 // This function simultaneously deletes files from front end with back end
 func deleteUserFiles(tempFileDeletionIDs: [Int]) {
-    // server bucket reference for user data
-    let dbUserFilesRef = storageRef.child("userFiles")
-    
-    var pdfObjectsToDelete: [(PDFDocument, Int)] = []
-    
-    // get objects to delete from application
-    for pdfStoredObject in pdfStoredObjects {
-        if tempFileDeletionIDs.contains(pdfStoredObject.1) {
-            pdfObjectsToDelete.append(pdfStoredObject)
-        }
-    }
-    
-    // make server delete request
-    if pdfObjectsToDelete.count == 1 {
-        // server data deletion
-        let tempRefServerNode = dbUserFilesRef.child("File_\(pdfObjectsToDelete[0].1).pdf")
-        tempRefServerNode.delete { (error) in
-            if let error = error {
-                print("\nWARNING: THERE WAS AN ERROR IN DELETING YOUR DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
-            } else {
-                print("~File_\(pdfObjectsToDelete[0].1).pdf Was Successfully Deleted On The Server Side~")
+    DispatchQueue.global(qos: .default).async() {
+        // server bucket reference for user data
+        let dbUserFilesRef = storageRef.child("userFiles")
+        
+        var pdfObjectsToDelete: [(PDFDocument, Int)] = []
+        
+        // get objects to delete from application
+        for pdfStoredObject in pdfStoredObjects {
+            if tempFileDeletionIDs.contains(pdfStoredObject.1) {
+                pdfObjectsToDelete.append(pdfStoredObject)
             }
         }
         
-        // local deletion
-        for pdfObjectToDelete in pdfObjectsToDelete {
-            pdfStoredObjects.removeAll(where: {$1 == pdfObjectToDelete.1})
-        }
-        
-    } else {
-        for itemToDelete in pdfObjectsToDelete {
-            let tempRefServerNode = dbUserFilesRef.child("File_\(itemToDelete.1).pdf")
+        // make server delete request
+        if pdfObjectsToDelete.count == 1 {
             
+            // server data deletion
+            let tempRefServerNode = dbUserFilesRef.child("File_\(pdfObjectsToDelete[0].1).pdf")
             tempRefServerNode.delete { (error) in
                 if let error = error {
                     print("\nWARNING: THERE WAS AN ERROR IN DELETING YOUR DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
                 } else {
-                    print("~File_\(itemToDelete.1).pdf Was Successfully Deleted On The Server Side~")
+                    print("~File_\(pdfObjectsToDelete[0].1).pdf Was Successfully Deleted On The Server Side~")
                 }
             }
-        }
-        
-        // local deletion
-        for pdfObjectToDelete in pdfObjectsToDelete {
-            pdfStoredObjects.removeAll(where: {$1 == pdfObjectToDelete.1})
+            
+            // sync deleted server pdf objects with locally stored objects in memory
+            DispatchQueue.global(qos: .userInitiated).async() {
+                DispatchQueue.main.async {
+                    for pdfObjectToDelete in pdfObjectsToDelete {
+                        pdfStoredObjects.removeAll(where: {$1 == pdfObjectToDelete.1})
+                        listPDFThumbnails.removeAll(where: {$1 == pdfObjectToDelete.1})
+                    }
+                    print("THUMBNAIL CHECK: \(listPDFThumbnails)")
+                }
+            }
+            
+        } else {
+            // make server delete requests
+            for itemToDelete in pdfObjectsToDelete {
+                let tempRefServerNode = dbUserFilesRef.child("File_\(itemToDelete.1).pdf")
+                
+                //server data deletion
+                tempRefServerNode.delete { (error) in
+                    if let error = error {
+                        print("\nWARNING: THERE WAS AN ERROR IN DELETING YOUR DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
+                    } else {
+                        print("~File_\(itemToDelete.1).pdf Was Successfully Deleted On The Server Side~")
+                    }
+                }
+            }
+            
+            DispatchQueue.global(qos: .userInitiated).async() {
+                DispatchQueue.main.async {
+                    for pdfObjectToDelete in pdfObjectsToDelete {
+                        pdfStoredObjects.removeAll(where: {$1 == pdfObjectToDelete.1})
+                        listPDFThumbnails.removeAll(where: {$1 == pdfObjectToDelete.1})
+                    }
+                    print("THUMBNAIL CHECK: \(listPDFThumbnails)")
+                }
+            }
         }
     }
 }
 
-// This function turna a pdf object into a thumbnail image
+// This function turns a pdf object into a thumbnail image
 func generatePDFThumbnail(currentpdf: PDFDocument) -> UIImage {
-    let pdfDocumentCover = currentpdf.page(at: 0)
-    let thumbnailSize = CGSize(width: 130, height: 200)
-    return (pdfDocumentCover?.thumbnail(of: thumbnailSize, for: .mediaBox))!
+        let pdfDocumentCover = currentpdf.page(at: 0)
+        let thumbnailSize = CGSize(width: 130, height: 200)
+        return (pdfDocumentCover?.thumbnail(of: thumbnailSize, for: .mediaBox))!
 }
 
 class ScanVC: UIViewController {
@@ -299,7 +315,7 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
             
             tempList.append(pdfDocumentInstance)
             
-            listPDFThumbnails.append(generatePDFThumbnail(currentpdf: tempList.last!))
+            listPDFThumbnails.append(((generatePDFThumbnail(currentpdf: tempList.last!)), pdfDocIDExternal))
             
             self.dismiss(animated: true)
             
@@ -404,7 +420,7 @@ extension ScanVC:PHPickerViewControllerDelegate {
             
             tempList.append(pdfDocumentInstance)
             
-            listPDFThumbnails.append(generatePDFThumbnail(currentpdf: tempList.last!))
+            listPDFThumbnails.append(((generatePDFThumbnail(currentpdf: tempList.last!)), pdfDocIDExternal))
 			
 			self.dismiss(animated: true)
 			

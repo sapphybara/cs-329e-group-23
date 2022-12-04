@@ -37,7 +37,7 @@ class FullPdfVC: UIViewController {
     @IBAction func deleteIndividualFile(_ sender: Any) {
         let controller = UIAlertController(
             title: "Delete File",
-            message: "Do You Want To Delete \(currentPDFFileName)?",
+            message: "Are You Sure You Want To Delete \n\"\(currentPDFFileName)\"?",
             preferredStyle: .alert)
         
         controller.addAction(UIAlertAction(

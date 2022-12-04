@@ -52,6 +52,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             print("number of scans \(pdfStoredObjects.count)")
             //        print(listPDFThumbnails)
             //        print(listPDFThumbnails.count)
+
             self.collectionView.reloadData()
         }
         
@@ -110,7 +111,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellIdentifier, for: indexPath) as! pdfCollectionViewCell
         let row = indexPath.row
         
-        cell.myImage.image =  listPDFThumbnails[row]
+        cell.myImage.image =  listPDFThumbnails[row].0
         
         return cell
     }
