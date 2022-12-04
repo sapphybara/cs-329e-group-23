@@ -53,7 +53,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     override func viewDidAppear(_ animated: Bool) {
-//        print("-HOME VC CHECK- pdfObjectCheck: \(pdfStoredObjects.count)-") // VISUAL CHECK
+        // checks for change in user login and also updates welcome message based on that application response
         welcomeUser.text = updateWelcomeMessage()
         
         // This function shows data
@@ -64,41 +64,48 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             print("number of scans \(pdfStoredObjects.count)")
             //        print(listPDFThumbnails)
             //        print(listPDFThumbnails.count)
-
+            
             self.collectionView.reloadData()
         }
         
-        if scanOrUpload == true && loadServerData == true {
-            // block says, if file has been scanned or uploaded, reload the server data (add data procedure)
-            
-            // This line retrieves server data in background
-            serverUserFilesDataRetrieval()
-            
-            print("\nTHROWING SERVER DATA TO HOMEVC, CASE 1\n")
-            
-            showData()
-            
-            scanOrUpload = false
-            loadServerData = false
-        } else if scanOrUpload == false && loadServerData == true {
-            // block says, if file has not been scanned or uploaded, and server data has not been loaded locally
-            // then load server data once with an array check to mitigate copies (start up procedure)
-            
-            // WARREN USE THIS BLANK SPACE FOR animation
-            
-            // This line retrieves server data in background
-            serverUserFilesDataRetrieval()
-            
-            print("\nTHROWING SERVER DATA TO HOMEVC, CASE 2\n")
-            
-            showData()
-            
-            loadServerData = false
+        // Do these procedures against the server if the user is logged in
+        if activeUser != "Anonymous" {
+            if scanOrUpload == true && loadServerData == true {
+                // block says, if file has been scanned or uploaded, reload the server data (add data procedure)
+                
+                // This line retrieves server data in background
+                serverUserFilesDataRetrieval()
+                
+                print("\nTHROWING SERVER DATA TO HOMEVC, CASE 1\n")
+                
+                showData()
+                
+                scanOrUpload = false
+                loadServerData = false
+            } else if scanOrUpload == false && loadServerData == true {
+                // block says, if file has not been scanned or uploaded, and server data has not been loaded locally
+                // then load server data once with an array check to mitigate copies (start up procedure)
+                
+                // WARREN USE THIS BLANK SPACE FOR animation
+                
+                // This line retrieves server data in background
+                serverUserFilesDataRetrieval()
+                
+                print("\nTHROWING SERVER DATA TO HOMEVC, CASE 2\n")
+                
+                showData()
+                
+                loadServerData = false
+            } else {
+                // block says, if file has not been scanned or uploaded, and server data has been loaded locally
+                // just show locally loaded data, not need to make a server request (navigation procedure)
+                
+                print("\nNO DATA HAS BEEN SCANNED, JUST DISPLAYING DATA\n")
+                showData()
+            }
         } else {
-            // block says, if file has not been scanned or uploaded, and server data has been loaded locally
-            // just show locally loaded data, not need to make a server request (navigation procedure)
-            
-            print("\nNO DATA HAS BEEN SCANNED, JUST DISPLAYING DATA\n")
+            // block says, since the user is Anonymous, no need to request data from server, only show local data
+            print("\nUSER IS Anonymous, SERVER REQUEST NOT VALID.\n")
             showData()
         }
     }

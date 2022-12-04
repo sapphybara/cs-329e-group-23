@@ -27,142 +27,190 @@ private let storageRef = Storage.storage(url:"gs://final-project-group-23.appspo
 
 // This function retrives all server data created by the user
 func serverUserFilesDataRetrieval() {
-    // server bucket reference for user data
-    let dbUserFilesRef = storageRef.child("userFiles")
+    // if user is logged in, load their data, else don't save data
+    activeUser = provideCurrentUser()
     
-    print("\nGetting List of all stored server files for user: \(activeUser).")
-    
-    dbUserFilesRef.listAll{ (result, error) in
-        if let error = error {
-            print("\nWARNING: ERROR IN RETREIVING DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
-        } else {
-            
-            print("\nRetrieving DB Data...")
-            
-            var dataCheckArray: [Int] = []
-            
-            // array to check and not add duplicate objects
-            for itemCheck in pdfStoredObjects {
-                dataCheckArray.append(itemCheck.1)
-            }
-            
-            // this retreives all pdfdocuments from server side and file id's from original file names
-            if result.items.count > 0 {
-                for item in result.items {
-                    // get original file id from server-stored name
-                    let strIDNameSearch = String(item.name)
-                    let firstIndex = strIDNameSearch.firstIndex(of: "_")
-                    let firstIndexOneOver = strIDNameSearch.index(after: firstIndex!)
-                    let secondIndex = strIDNameSearch.lastIndex(of: ".")
-                    let range = firstIndexOneOver..<secondIndex!
-                    let tempFileID = Int(strIDNameSearch[range])!
-                    
-                    print("-Attempting to add file with ID: \(tempFileID)-")
-                    // if items are already in the listPDFDocuments Array, skip readdition, otherwise add data to global array
-                    if dataCheckArray.contains(tempFileID) {
-                        print("-DUPLICATE ID FOUND: FILE WITH ID \"\(tempFileID)\" WAS SKIPPED-")
-                    } else {
-                        // get pdf document from server
-                        let path = dbUserFilesRef.child("\(strIDNameSearch)")
-                        
-                        // maxSize is maxSize of INT 64 for swift, just to play it safe
-                        path.getData(maxSize: 9223372036854775807) { (data, error) -> Void in
-                            print("Getting File...")
-                            
-                            let bytemanager = Data(data!)
-                            
-                            let pdfFileItem = PDFDocument(data: (bytemanager as NSData) as Data)
-                            
-//                            print(pdfFileItem!)
-                            
-                            let pdfFileOut = pdfFileItem!
-                            
-                            print("pdfFileOut: \(pdfFileOut)")
-                            
-                            // pdf tuple array for file management on UI and server side
-                            pdfStoredObjects.append((pdfFileOut, tempFileID))
-                            
-                            // regenerate all thumbnails once the data is loaded in
-                            var tempList: [PDFDocument] = []
-                            
-                            tempList.append(pdfFileOut)
-                            
-                            listPDFThumbnails.append(((generatePDFThumbnail(currentpdf: tempList.last!)), tempFileID))
-                        }
-                        
-                        print("CHECK IN PDF STORED OBJECTS: \(pdfStoredObjects.count)")
-                        print("pdfDocument Retreival Path: \(path)")
-                        print("fileID Retrieved = \"\(tempFileID)\"\n")
-                    }
-                }
+    if activeUser != "Anonymous" {
+        // server bucket reference for user data
+        let dbUserFilesRef = storageRef.child("userFiles")
+        
+        print("\nGetting List of all stored server files for user: \(activeUser).")
+        
+        dbUserFilesRef.listAll{ (result, error) in
+            if let error = error {
+                print("\nWARNING: ERROR IN RETREIVING DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
             } else {
-                print("\nNo Files Stored In Server DB...")
+                
+                print("\nRetrieving DB Data...")
+                
+                var dataCheckArray: [Int] = []
+                
+                // array to check and not add duplicate objects
+                for itemCheck in pdfStoredObjects {
+                    dataCheckArray.append(itemCheck.1)
+                }
+                
+                // this retreives all pdfdocuments from server side and file id's from original file names
+                if result.items.count > 0 {
+                    for item in result.items {
+                        // get original file id from server-stored name
+                        let strIDNameSearch = String(item.name)
+                        let firstIndex = strIDNameSearch.firstIndex(of: "_")
+                        let firstIndexOneOver = strIDNameSearch.index(after: firstIndex!)
+                        let secondIndex = strIDNameSearch.lastIndex(of: ".")
+                        let range = firstIndexOneOver..<secondIndex!
+                        let tempFileID = Int(strIDNameSearch[range])!
+                        
+                        print("-Attempting to add file with ID: \(tempFileID)-")
+                        // if items are already in the listPDFDocuments Array, skip readdition, otherwise add data to global array
+                        if dataCheckArray.contains(tempFileID) {
+                            print("-DUPLICATE ID FOUND: FILE WITH ID \"\(tempFileID)\" WAS SKIPPED-")
+                        } else {
+                            // get pdf document from server
+                            let path = dbUserFilesRef.child("\(strIDNameSearch)")
+                            
+                            // maxSize is maxSize of INT 64 for swift, just to play it safe
+                            path.getData(maxSize: 9223372036854775807) { (data, error) -> Void in
+                                print("Getting File...")
+                                
+                                let bytemanager = Data(data!)
+                                
+                                let pdfFileItem = PDFDocument(data: (bytemanager as NSData) as Data)
+                                
+//                                print(pdfFileItem!)
+                                
+                                let pdfFileOut = pdfFileItem!
+                                
+                                print("pdfFileOut: \(pdfFileOut)")
+                                
+                                // pdf tuple array for file management on UI and server side
+                                pdfStoredObjects.append((pdfFileOut, tempFileID))
+                                
+                                // regenerate all thumbnails once the data is loaded in
+                                var tempList: [PDFDocument] = []
+                                
+                                tempList.append(pdfFileOut)
+                                
+                                listPDFThumbnails.append(((generatePDFThumbnail(currentpdf: tempList.last!)), tempFileID))
+                            }
+                            
+                            print("CHECK IN PDF STORED OBJECTS: \(pdfStoredObjects.count)")
+                            print("pdfDocument Retreival Path: \(path)")
+                            print("fileID Retrieved = \"\(tempFileID)\"\n")
+                        }
+                    }
+                } else {
+                    print("\nNo Files Stored In Server DB...")
+                }
             }
         }
+    } else {
+        print("\nUser Is Anonymous, No Data To Get From Server DB...")
     }
 }
 
 // This function simultaneously deletes files from front end with back end
 func deleteUserFiles(tempFileDeletionIDs: [Int]) {
-    DispatchQueue.global(qos: .default).async() {
-        // server bucket reference for user data
-        let dbUserFilesRef = storageRef.child("userFiles")
-        
-        var pdfObjectsToDelete: [(PDFDocument, Int)] = []
-        
-        // get objects to delete from application
-        for pdfStoredObject in pdfStoredObjects {
-            if tempFileDeletionIDs.contains(pdfStoredObject.1) {
-                pdfObjectsToDelete.append(pdfStoredObject)
-            }
-        }
-        
-        // make server delete request
-        if pdfObjectsToDelete.count == 1 {
+    // check for change in user login
+    activeUser = provideCurrentUser()
+    
+    // if user is logged in, synchronize server file deletion with local file deletion
+    if activeUser != "Anonymous" {
+        DispatchQueue.global(qos: .default).async() {
+            // server bucket reference for user data
+            let dbUserFilesRef = storageRef.child("userFiles")
             
-            // server data deletion
-            let tempRefServerNode = dbUserFilesRef.child("File_\(pdfObjectsToDelete[0].1).pdf")
-            tempRefServerNode.delete { (error) in
-                if let error = error {
-                    print("\nWARNING: THERE WAS AN ERROR IN DELETING YOUR DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
-                } else {
-                    print("~File_\(pdfObjectsToDelete[0].1).pdf Was Successfully Deleted On The Server Side~")
+            var pdfObjectsToDelete: [(PDFDocument, Int)] = []
+            
+            // get objects to delete from application
+            for pdfStoredObject in pdfStoredObjects {
+                if tempFileDeletionIDs.contains(pdfStoredObject.1) {
+                    pdfObjectsToDelete.append(pdfStoredObject)
                 }
             }
             
-            // sync deleted server pdf objects with locally stored objects in memory
-            DispatchQueue.global(qos: .userInitiated).async() {
-                DispatchQueue.main.async {
-                    for pdfObjectToDelete in pdfObjectsToDelete {
-                        pdfStoredObjects.removeAll(where: {$1 == pdfObjectToDelete.1})
-                        listPDFThumbnails.removeAll(where: {$1 == pdfObjectToDelete.1})
-                    }
-                    print("THUMBNAIL CHECK: \(listPDFThumbnails)")
-                }
-            }
-            
-        } else {
-            // make server delete requests
-            for itemToDelete in pdfObjectsToDelete {
-                let tempRefServerNode = dbUserFilesRef.child("File_\(itemToDelete.1).pdf")
+            // make server delete request
+            if pdfObjectsToDelete.count == 1 {
                 
-                //server data deletion
+                // server data deletion
+                let tempRefServerNode = dbUserFilesRef.child("File_\(pdfObjectsToDelete[0].1).pdf")
                 tempRefServerNode.delete { (error) in
                     if let error = error {
                         print("\nWARNING: THERE WAS AN ERROR IN DELETING YOUR DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
                     } else {
-                        print("~File_\(itemToDelete.1).pdf Was Successfully Deleted On The Server Side~")
+                        print("~File_\(pdfObjectsToDelete[0].1).pdf Was Successfully Deleted On The Server Side~")
+                    }
+                }
+                
+                // sync deleted server pdf objects with locally stored objects in memory
+                DispatchQueue.global(qos: .userInitiated).async() {
+                    DispatchQueue.main.async {
+                        for pdfObjectToDelete in pdfObjectsToDelete {
+                            pdfStoredObjects.removeAll(where: {$1 == pdfObjectToDelete.1})
+                            listPDFThumbnails.removeAll(where: {$1 == pdfObjectToDelete.1})
+                        }
+                        print("THUMBNAIL CHECK: \(listPDFThumbnails)")
+                    }
+                }
+                
+            } else {
+                // make server delete requests
+                for itemToDelete in pdfObjectsToDelete {
+                    let tempRefServerNode = dbUserFilesRef.child("File_\(itemToDelete.1).pdf")
+                    
+                    //server data deletion
+                    tempRefServerNode.delete { (error) in
+                        if let error = error {
+                            print("\nWARNING: THERE WAS AN ERROR IN DELETING YOUR DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
+                        } else {
+                            print("~File_\(itemToDelete.1).pdf Was Successfully Deleted On The Server Side~")
+                        }
+                    }
+                }
+                
+                DispatchQueue.global(qos: .userInitiated).async() {
+                    DispatchQueue.main.async {
+                        for pdfObjectToDelete in pdfObjectsToDelete {
+                            pdfStoredObjects.removeAll(where: {$1 == pdfObjectToDelete.1})
+                            listPDFThumbnails.removeAll(where: {$1 == pdfObjectToDelete.1})
+                        }
+                        print("THUMBNAIL CHECK: \(listPDFThumbnails)")
                     }
                 }
             }
+        }
+    } else {
+        // Anonymous user, invalid server data synchronization, therefore only delete local application data
+        DispatchQueue.global(qos: .default).async() {
+            var pdfObjectsToDelete: [(PDFDocument, Int)] = []
             
-            DispatchQueue.global(qos: .userInitiated).async() {
-                DispatchQueue.main.async {
-                    for pdfObjectToDelete in pdfObjectsToDelete {
-                        pdfStoredObjects.removeAll(where: {$1 == pdfObjectToDelete.1})
-                        listPDFThumbnails.removeAll(where: {$1 == pdfObjectToDelete.1})
+            // get objects to delete from application
+            for pdfStoredObject in pdfStoredObjects {
+                if tempFileDeletionIDs.contains(pdfStoredObject.1) {
+                    pdfObjectsToDelete.append(pdfStoredObject)
+                }
+            }
+            
+            // delete one local Anonymous user uploaded file, other wise delete local data in batches
+            if pdfObjectsToDelete.count == 1 {
+                DispatchQueue.global(qos: .userInitiated).async() {
+                    DispatchQueue.main.async {
+                        for pdfObjectToDelete in pdfObjectsToDelete {
+                            pdfStoredObjects.removeAll(where: {$1 == pdfObjectToDelete.1})
+                            listPDFThumbnails.removeAll(where: {$1 == pdfObjectToDelete.1})
+                        }
+                        print("THUMBNAIL CHECK: \(listPDFThumbnails)")
                     }
-                    print("THUMBNAIL CHECK: \(listPDFThumbnails)")
+                }
+            } else {
+                DispatchQueue.global(qos: .userInitiated).async() {
+                    DispatchQueue.main.async {
+                        for pdfObjectToDelete in pdfObjectsToDelete {
+                            pdfStoredObjects.removeAll(where: {$1 == pdfObjectToDelete.1})
+                            listPDFThumbnails.removeAll(where: {$1 == pdfObjectToDelete.1})
+                        }
+                        print("THUMBNAIL CHECK: \(listPDFThumbnails)")
+                    }
                 }
             }
         }
@@ -303,8 +351,10 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
             // make a document id for server side data management
             pdfDocIDExternal = idMaker(pdfListCheck: pdfStoredObjects)
             
-            // upload data to server - this works and has been tested and verified
-            self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal)
+            // upload data to server if user is not "Anonymous"
+            if activeUser != "Anonymous" {
+                self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal)
+            }
             
             // global list to use in HomeVC
             pdfStoredObjects.append((pdfDocumentInstance, pdfDocIDExternal))
@@ -324,9 +374,11 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
             //print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(self.imageArray.count)\n\n")
             print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(pdfStoredObjects.count)\n\n")
             
-            // switch required to keep track of loading data to HomeVC
-            scanOrUpload = true
-            loadServerData = true
+            // switches required to keep track of loading data to HomeVC
+            if activeUser != "Anonymous" {
+                scanOrUpload = true
+                loadServerData = true
+            }
         }
 	}
 }
@@ -400,8 +452,10 @@ extension ScanVC:PHPickerViewControllerDelegate {
 			// make a document id for server side data management
 			pdfDocIDExternal = idMaker(pdfListCheck: pdfStoredObjects)
 			
-			// upload data to server - this works and has been tested and verified
-			self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal)
+			// upload data to server if user is not "Anonymous"
+            if activeUser != "Anonymous" {
+                self.serverFileUpload(pdfDocument: pdfDocumentInstance, pdfID: pdfDocIDExternal)
+            }
 			
 			// global list to use in HomeVC
             pdfStoredObjects.append((pdfDocumentInstance, pdfDocIDExternal))
@@ -421,8 +475,11 @@ extension ScanVC:PHPickerViewControllerDelegate {
 			//print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(self.imageArray.count)\n\n")
 			print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(pdfStoredObjects.count)\n\n")
             
-            scanOrUpload = true
-            loadServerData = true
+            // switches required to keep track of loading data to HomeVC
+            if activeUser != "Anonymous" {
+                scanOrUpload = true
+                loadServerData = true
+            }
 		}
 	}
 }
