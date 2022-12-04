@@ -11,10 +11,25 @@ import PDFKit
 // global array for file deletion from UI to server side, uses file IDs from file naming schema within application
 var filestToDelete: [Int] = []
 
+// initializes welcome message when opening application
+func updateWelcomeMessage() -> String {
+    // Assign welcome message based on the user
+    activeUser = provideCurrentUser()
+    
+    var messageOut: String = ""
+    
+    if activeUser != "Anonymous" {
+        messageOut = "Welcome \(activeUser)!\nYour Files Will Automatically Sync 🔄"
+    } else {
+        messageOut = "Welcome \(activeUser) User!\nLogin Or Lose Your Data ⚠️🤖"
+    }
+    return messageOut
+}
+
 class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     @IBOutlet weak var scansLabel: UILabel!
-    
+    @IBOutlet weak var welcomeUser: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
     let collectionCellIdentifier = "pdfCell"
@@ -25,6 +40,8 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         collectionView.delegate = self
         collectionView.dataSource = self
         
+        welcomeUser.text = updateWelcomeMessage()
+        
         scansLabel.text = "Scan or Upload something to get started!"
         //        // Add PDFView to view controller.
         //        let pdfView = PDFView(frame: self.view.bounds)
@@ -33,16 +50,11 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         //
         //        // Fit content in PDFView.
         //        pdfView.autoScales = true
-        //
-        //        // Load Sample.pdf file from app bundle.
-        //        let fileURL = Bundle.main.url(forResource: "sample-scan-1", withExtension: "pdf")
-        //        pdfView.document = PDFDocument(url: fileURL!)
-
-        // Do any additional setup after loading the view.
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print("-HOME VC CHECK- pdfObjectCheck: \(pdfStoredObjects.count)-")
+//        print("-HOME VC CHECK- pdfObjectCheck: \(pdfStoredObjects.count)-") // VISUAL CHECK
+        welcomeUser.text = updateWelcomeMessage()
         
         // This function shows data
         func showData() {

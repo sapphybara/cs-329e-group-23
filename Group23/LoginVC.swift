@@ -8,6 +8,21 @@
 import UIKit
 import FirebaseAuth
 
+// provide current user
+func provideCurrentUser() -> String {
+    var activeUserGet: String = ""
+    
+    if Auth.auth().currentUser != nil {
+        activeUserGet = (Auth.auth().currentUser?.email)!
+    } else {
+        activeUserGet = "Anonymous"
+    }
+    return activeUserGet
+}
+
+// global user variable to access user data bucket
+var activeUser: String = provideCurrentUser()
+
 /// handles the login screen for the user
 /// NOTE: derived from Warren's HW5
 class LoginVC: UIViewController, UITextFieldDelegate {
@@ -36,6 +51,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         Auth.auth().addStateDidChangeListener() { auth, user in
             if user != nil {
                 self.performSegue(withIdentifier: self.successSegue, sender: nil)
+                activeUser = provideCurrentUser() // makes a change to active file server node bucket
 
                 // reset the login screen to default to prepare for possible logout
                 self.emailField.text = nil

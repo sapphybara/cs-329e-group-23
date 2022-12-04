@@ -49,9 +49,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Home!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qu2-rd-fOw">
-                                <rect key="frame" x="183.66666666666666" y="141" width="61" height="26"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qu2-rd-fOw">
+                                <rect key="frame" x="28.666666666666657" y="141" width="371" height="0.0"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="371" id="g55-CT-AZK"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
                                 <color key="textColor" name="text-high-emphasis"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -65,7 +68,7 @@
                                 </connections>
                             </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="jQd-9u-XBc">
-                                <rect key="frame" x="0.0" y="267" width="428" height="659"/>
+                                <rect key="frame" x="0.0" y="241" width="428" height="685"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="KGA-Rs-06c">
                                     <size key="itemSize" width="130" height="200"/>
@@ -100,8 +103,8 @@
                                 </cells>
                             </collectionView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="scan label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zc4-Vd-Il6">
-                                <rect key="frame" x="25" y="213" width="378" height="46"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="25" y="187" width="378" height="46"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -125,11 +128,12 @@
                     <connections>
                         <outlet property="collectionView" destination="jQd-9u-XBc" id="Mg3-Lh-DEj"/>
                         <outlet property="scansLabel" destination="Zc4-Vd-Il6" id="eMw-oU-Ejk"/>
+                        <outlet property="welcomeUser" destination="qu2-rd-fOw" id="RXK-nN-KuY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mhS-2y-0SK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="575.38461538461536" y="-944.07582938388623"/>
+            <point key="canvasLocation" x="574.76635514018687" y="-944.70842332613393"/>
         </scene>
         <!--Scan-->
         <scene sceneID="3eG-lz-zcg">
@@ -243,7 +247,7 @@
             <objects>
                 <viewController storyboardIdentifier="loginScreen" id="roE-X7-scL" customClass="LoginVC" customModule="Group23" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZtE-b0-qVO">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="869"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Oa2-hW-YC4">
@@ -843,7 +847,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="1q3-7b-9nw"/>
-        <segue reference="KQu-CS-FIc"/>
+        <segue reference="D8A-qg-3LQ"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="camera.fill" catalog="system" width="128" height="93"/>

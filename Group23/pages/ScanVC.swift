@@ -12,7 +12,7 @@ import PhotosUI
 import PDFKit
 import FirebaseAuth
 import FirebaseCore
-import FirebaseStorage // Addition for PDF File management - SL
+import FirebaseStorage
 
 // global arrays needed for application functionality
 var listPDFThumbnails: [(UIImage, Int)] = []
@@ -30,7 +30,7 @@ func serverUserFilesDataRetrieval() {
     // server bucket reference for user data
     let dbUserFilesRef = storageRef.child("userFiles")
     
-    print("\nGetting List of all stored server files.")
+    print("\nGetting List of all stored server files for user: \(activeUser).")
     
     dbUserFilesRef.listAll{ (result, error) in
         if let error = error {
@@ -209,7 +209,6 @@ class ScanVC: UIViewController {
 		self.present(picker, animated: true)
 	}
 	
-	
 	// MARK: - Scanner Camera View
 	@IBAction func cameraButtonPressed(_ sender: UIButton) {
 		configureDocumentScanView()
@@ -329,14 +328,6 @@ extension ScanVC:VNDocumentCameraViewControllerDelegate {
             scanOrUpload = true
             loadServerData = true
         }
-
-//		Add this to self.dismiss() to reload table/collection data after adding to imageArray
-//		{
-//			DispatchQueue.main.async {
-//				self.myCollectionOrTableView.reloadData()
-//			}
-//		}
-		
 	}
 }
 

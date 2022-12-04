@@ -84,6 +84,7 @@ class UserSettingsProfileVC: UIViewController, UITextFieldDelegate {
     @IBAction func logoutButtonPressed(_ sender: Any) {
         do {
             try Auth.auth().signOut() // logs out, user is now nil
+            activeUser = provideCurrentUser() // makes a change to active file server node bucket
         } catch {
             print("Sign Out Error")
         }
