@@ -176,6 +176,17 @@ class UserSettingsProfileVC: UIViewController, UITextFieldDelegate {
                 txtField.delegate = self
             }
         }
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(recognizeSwipeGesture(recognizer:)))
+        swipeRight.direction = UISwipeGestureRecognizer.Direction.right
+        self.view.addGestureRecognizer(swipeRight)
+    }
+    @IBAction func recognizeSwipeGesture(recognizer: UISwipeGestureRecognizer)
+    {
+        if recognizer.direction == .right{
+            print("swiped right")
+            self.tabBarController?.selectedIndex -= 1
+        }
     }
     
     /// sets the value of the user's metadata, as well as text color depending on status

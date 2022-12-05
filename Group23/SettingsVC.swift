@@ -7,6 +7,8 @@
 
 import UIKit
 
+var allowHaptics:Bool = false
+
 class SettingsVC: UIViewController {
 
     @IBOutlet weak var darkModeSwitch: UISwitch!
@@ -19,10 +21,27 @@ class SettingsVC: UIViewController {
         
         currentMode = traitCollection.userInterfaceStyle
         darkModeSwitch.isOn = currentMode != .light
+        hapticsSwitch.isOn = allowHaptics
     }
         
     @IBAction func handleDarkModeSwitch(_ sender: Any) {
         currentMode = darkModeSwitch.isOn ? .dark : .light
         view.window?.windowScene?.keyWindow?.overrideUserInterfaceStyle = currentMode
     }
+    
+    @IBAction func handleHapticsSwitch(_ sender: Any) {
+        if (hapticsSwitch.isOn == true){
+            allowHaptics = true
+            print("Haptics now enabled")
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
+        }else {
+            allowHaptics = false
+            print("Haptics now disabled")
+        }
+        
+        
+        
+    }
+    
 }

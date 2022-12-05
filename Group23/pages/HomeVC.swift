@@ -28,6 +28,17 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         welcomeUser.text = updateWelcomeMessage()
         
         scansLabel.text = "Scan or Upload something to get started!"
+    
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(recognizeSwipeGesture(recognizer:)))
+        swipeLeft.direction = UISwipeGestureRecognizer.Direction.left
+        self.view.addGestureRecognizer(swipeLeft)
+    }
+    @IBAction func recognizeSwipeGesture(recognizer: UISwipeGestureRecognizer)
+    {
+        if recognizer.direction == .left{
+            print("swiped left")
+            self.tabBarController?.selectedIndex += 1
+        }
     }
     
     func updateWelcomeMessage() -> String {
@@ -98,7 +109,10 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("picked pdf \(indexPath.item)")
-        
+        if allowHaptics{
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

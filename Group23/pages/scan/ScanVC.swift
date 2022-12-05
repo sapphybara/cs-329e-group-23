@@ -68,6 +68,10 @@ func serverUserFilesDataRetrieval(completion: @escaping () -> Void) {
                             if let pdfFileOut = pdfFileItem {
                                 // pdf tuple array for file management on UI and server side
                                 pdfStoredObjects.append((pdfFileOut, tempFileID))
+                                if allowHaptics{
+                                    let generator = UINotificationFeedbackGenerator()
+                                    generator.notificationOccurred(.success)
+                                }
                                 
                                 // regenerate all thumbnails once the data is loaded in
                                 var tempList: [PDFDocument] = []
@@ -179,6 +183,24 @@ class ScanVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(recognizeSwipeGesture(recognizer:)))
+        swipeLeft.direction = UISwipeGestureRecognizer.Direction.left
+        self.view.addGestureRecognizer(swipeLeft)
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(recognizeSwipeGesture(recognizer:)))
+        swipeRight.direction = UISwipeGestureRecognizer.Direction.right
+        self.view.addGestureRecognizer(swipeRight)
+    }
+    @IBAction func recognizeSwipeGesture(recognizer: UISwipeGestureRecognizer)
+    {
+        if recognizer.direction == .left{
+            print("swiped left")
+            self.tabBarController?.selectedIndex += 1
+        }
+        if recognizer.direction == .right{
+            print("swiped right")
+            self.tabBarController?.selectedIndex -= 1
+        }
     }
     
     // MARK: - Library Upload
@@ -311,6 +333,10 @@ extension ScanVC: PHPickerViewControllerDelegate {
             
             // global list to use in HomeVC
             pdfStoredObjects.append((pdfDocumentInstance, pdfDocIDExternal))
+            if allowHaptics{
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
+            }
             
             // temporary list just for thumbnail use for front end display
             var tempList: [PDFDocument] = []

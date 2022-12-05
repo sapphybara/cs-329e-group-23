@@ -46,6 +46,16 @@ class LoginVC: UIViewController, UITextFieldDelegate {
                 self.switchAuthMethod.selectedSegmentIndex = 0
             }
         }
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(recognizeSwipeGesture(recognizer:)))
+        swipeRight.direction = UISwipeGestureRecognizer.Direction.right
+        self.view.addGestureRecognizer(swipeRight)
+    }
+    @IBAction func recognizeSwipeGesture(recognizer: UISwipeGestureRecognizer)
+    {
+        if recognizer.direction == .right{
+            print("swiped right")
+            self.tabBarController?.selectedIndex -= 1
+        }
     }
     
     /// abstract function for showing either login or signup screens
