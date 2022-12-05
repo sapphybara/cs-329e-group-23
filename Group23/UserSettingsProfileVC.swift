@@ -28,67 +28,66 @@ func serverFileUserImageUpload() {
     
     let imageToUpload: Data = profileImageDataStructure[0].0.jpegData(compressionQuality: 0.1)!
     
-    let imageRef = storageRef.child("userProfilePicture/\(activeUser)/Image_\(imageID).jpeg")
+    // todo fix to firebase url
+    let imageRef = storageRef.child("userProfilePicture/\(activeUser?.email ?? "g@g.com")/Image_\(imageID).jpeg")
     
     print("\nUploading User Profile Image To Database...")
     
     // Upload user profile picture to the appropriate server location for the appropriate user
     _ = imageRef.putData(imageToUpload, metadata: nil)
     
-    print("\nUser \(activeUser)'s Profile Image Has Been Uploaded To The Database...")
+    print("\nUser \(activeUser?.displayName ?? activeUser?.email ?? "NOBODY")'s Profile Image Has Been Uploaded To The Database...")
 }
 
 // THIS NEEDS TESTING
 // This function retrieves the profile image from the database for the logged-in user
 func serverFileUserImageRetrieval() {
     // server bucket reference for user profile data
-    let dbUserFilesRef = storageRef.child("userProfilePicture/\(activeUser)")
     
-    print("\nGetting the profile picture for user: \(activeUser).")
-    
-    dbUserFilesRef.listAll{ (result, error) in
-        if let error = error {
-            print("\nWARNING: ERROR IN RETREIVING USER PROFILE IMAGE DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
-        } else {
-            
-            print("\nRetrieving DB Profile User Image Data...")
-            
-            // this retreives all profile images from server side and file id's from original file names, although there should always only be one stored in the database. Therefore only get the 0th element in the database
-            if result.items.count > 0 {
-                for item in result.items {
-                    // get original file id from server-stored file name
-                    let strIDNameSearch = String(item.name)
-                    let firstIndex = strIDNameSearch.firstIndex(of: "_")
-                    let firstIndexOneOver = strIDNameSearch.index(after: firstIndex!)
-                    let secondIndex = strIDNameSearch.lastIndex(of: ".")
-                    let range = firstIndexOneOver..<secondIndex!
-                    let tempFileID = Int(strIDNameSearch[range])!
-                    
-                    print("-Attempting to retrieve user profile image with ID: \(tempFileID)-")
-
-                    let path = dbUserFilesRef.child("\(strIDNameSearch)")
-                    
-                    // maxSize is maxSize of INT 64 for swift, just to play it safe
-                    path.getData(maxSize: 9223372036854775807) { (data, error) -> Void in
-                        print("Getting File...")
-                        
-                        let bytemanager = Data(data!)
-                        
-                        profileImageDataStructure[0].0 = UIImage(data: (bytemanager as NSData) as Data)!
-                    }
-                    
-                    profileImageDataStructure[0].1 = tempFileID
-                    
-                    print("User Profile Image Retreival Path: \(path)")
-                    print("Profile Image ID Retrieved = \"\(tempFileID)\"\n")
-                    
-                    // only get the first element in the database as there should only be one profile image per user
-                    break
-                }
+    if let user = activeUser {
+        let dbUserFilesRef = storageRef.child("userProfilePicture/\(user.email!)")
+        
+        print("\nGetting the profile picture for user: \(user.displayName ?? user.email!).")
+        dbUserFilesRef.listAll{ (result, error) in
+            if let error = error {
+                print("\nWARNING: ERROR IN RETREIVING USER PROFILE IMAGE DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
             } else {
-                print("\nNo User Profile Stored In Server DB...")
+                
+                print("\nRetrieving DB Profile User Image Data...")
+                
+                // this retreives all profile images from server side and file id's from original file names, although there should always only be one stored in the database. Therefore only get the 0th element in the database
+                if result.items.count > 0 {
+                    for item in result.items {
+                        // get original file id from server-stored file name
+                        let strIDNameSearch = String(item.name)
+                        let firstIndex = strIDNameSearch.firstIndex(of: "_")
+                        let firstIndexOneOver = strIDNameSearch.index(after: firstIndex!)
+                        let secondIndex = strIDNameSearch.lastIndex(of: ".")
+                        let range = firstIndexOneOver..<secondIndex!
+                        let tempFileID = Int(strIDNameSearch[range])!
+                        let path = dbUserFilesRef.child("\(strIDNameSearch)")
+                        
+                        print("-Attempting to retrieve user profile image with ID: \(tempFileID)-")
+                        // maxSize is maxSize of INT 64 for swift, just to play it safe
+                        path.getData(maxSize: 9223372036854775807) { (data, error) -> Void in
+                            print("Getting File...")
+                            let bytemanager = Data(data!)
+                            profileImageDataStructure[0].0 = UIImage(data: (bytemanager as NSData) as Data)!
+                        }
+                        
+                        profileImageDataStructure[0].1 = tempFileID
+                        print("User Profile Image Retreival Path: \(path)")
+                        print("Profile Image ID Retrieved = \"\(tempFileID)\"\n")
+                        // only get the first element in the database as there should only be one profile image per user
+                        break
+                    }
+                } else {
+                    print("\nNo User Profile Stored In Server DB...")
+                }
             }
         }
+    } else {
+        print("user not found, unable to retrieve profile image")
     }
 }
 
@@ -97,27 +96,32 @@ func serverFileUserImageRetrieval() {
 func serverFileUserImageDeletion() {
     DispatchQueue.global(qos: .default).async() {
         // server bucket reference for user data
-        let dbUserFilesRef = storageRef.child("userProfilePicture/\(activeUser)")
         
-        // make server delete request
-        if profileImageDataStructure[0].0.imageAsset != nil {
-            // server data deletion
-            let tempRefServerNode = dbUserFilesRef.child("Image_\(profileImageDataStructure[0].1).jpeg")
-            tempRefServerNode.delete { (error) in
-                if let error = error {
-                    print("\nWARNING: THERE WAS AN ERROR IN DELETING YOUR USER PROFILE IMAGE DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
-                } else {
-                    print("~Image_\(profileImageDataStructure[0].1).jpeg Was Successfully Deleted On The Server Side~")
-                }
-            }
+        if let user = activeUser {
+            let dbUserFilesRef = storageRef.child("userProfilePicture/\(user.email!)")
             
-            // sync deleted server user profile image objects with locally stored objects in memory
-            DispatchQueue.global(qos: .userInitiated).async() {
-                DispatchQueue.main.async {
-                    profileImageDataStructure.remove(at: 0)
-                    print("PROFILE IMAGE DATA STRUCTURE CHECK: \(profileImageDataStructure)")
+            // make server delete request
+            if profileImageDataStructure[0].0.imageAsset != nil {
+                // server data deletion
+                let tempRefServerNode = dbUserFilesRef.child("Image_\(profileImageDataStructure[0].1).jpeg")
+                tempRefServerNode.delete { (error) in
+                    if let error = error {
+                        print("\nWARNING: THERE WAS AN ERROR IN DELETING YOUR USER PROFILE IMAGE DATA. SEE MESSAGE BELOW - \n\(error.localizedDescription)\n")
+                    } else {
+                        print("~Image_\(profileImageDataStructure[0].1).jpeg Was Successfully Deleted On The Server Side~")
+                    }
+                }
+                
+                // sync deleted server user profile image objects with locally stored objects in memory
+                DispatchQueue.global(qos: .userInitiated).async() {
+                    DispatchQueue.main.async {
+                        profileImageDataStructure.remove(at: 0)
+                        print("PROFILE IMAGE DATA STRUCTURE CHECK: \(profileImageDataStructure)")
+                    }
                 }
             }
+        } else {
+            print("Cannot access an anonymous user's image")
         }
     }
 }
@@ -166,12 +170,12 @@ class UserSettingsProfileVC: UIViewController, UITextFieldDelegate {
             // make sure the cached user is not nil here, otherwise logout
             return performSegue(withIdentifier: logoutSegue, sender: self)
         }
-		
-		for fieldView in inputStack.arrangedSubviews {
-			if let txtField = fieldView as? UITextField {
-				txtField.delegate = self
-			}
-		}
+        
+        for fieldView in inputStack.arrangedSubviews {
+            if let txtField = fieldView as? UITextField {
+                txtField.delegate = self
+            }
+        }
     }
     
     /// sets the value of the user's metadata, as well as text color depending on status
@@ -196,18 +200,17 @@ class UserSettingsProfileVC: UIViewController, UITextFieldDelegate {
         // WARREN THERE IS AN ISSUE HERE, IF THIS IS COMMENTED OUT, THE VC DOES NOT SEGUE AND PROGRAM BREAKS.
         // THE CODE I WROTE SHOULD WORK, AS THAT IS THE METHOD I USED TO SYNC ALL USER DATA
         // IT MUST BE A BUG WITH THE STORYBOARD/VC SETUP
-//        // database server retrieval of user profile image
-//        activeUser = provideCurrentUser()
-//        serverFileUserImageRetrieval()
-//        print("CHECKING PROFILE IMAGE DATA STRUCTURE: \(profileImageDataStructure)")
-//        profileImage.image = profileImageDataStructure[0].0
+        //        // database server retrieval of user profile image
+        //        activeUser = provideCurrentUser()
+        //        serverFileUserImageRetrieval()
+        //        print("CHECKING PROFILE IMAGE DATA STRUCTURE: \(profileImageDataStructure)")
+        //        profileImage.image = profileImageDataStructure[0].0
     }
     
     // Logout Button Action
     @IBAction func logoutButtonPressed(_ sender: Any) {
         do {
             try Auth.auth().signOut() // logs out, user is now nil
-            activeUser = provideCurrentUser() // makes a change to active file server node bucket
         } catch {
             print("Sign Out Error")
         }
@@ -276,40 +279,40 @@ class UserSettingsProfileVC: UIViewController, UITextFieldDelegate {
                         label.text = valuesToSave[i]
                     }
                 }
-//                let currentUser = Auth.auth().currentUser
-//                let userUpdateRequest = currentUser?.createProfileChangeRequest()
-//                valuesToSave.enumerated().forEach { i, val in
-//                    switch i {
-//                    case 0:
-//                        userUpdateRequest?.displayName = valuesToSave[0]
-//                    case 2:
-//                        currentUser?.updateEmail(to: valuesToSave[1]) { err in
-//                            if let error = err as NSError? {
-//                                print("Couldn't save email: \(error.localizedDescription)")
-//                            }
-//                        }
-//                    case 1:
-//                        let phoneCreds = new FirebaseAuth.PhoneAuthCredential()
-//                    default:
-//                        break
-//                    }
-//                }
+                //                let currentUser = Auth.auth().currentUser
+                //                let userUpdateRequest = currentUser?.createProfileChangeRequest()
+                //                valuesToSave.enumerated().forEach { i, val in
+                //                    switch i {
+                //                    case 0:
+                //                        userUpdateRequest?.displayName = valuesToSave[0]
+                //                    case 2:
+                //                        currentUser?.updateEmail(to: valuesToSave[1]) { err in
+                //                            if let error = err as NSError? {
+                //                                print("Couldn't save email: \(error.localizedDescription)")
+                //                            }
+                //                        }
+                //                    case 1:
+                //                        let phoneCreds = new FirebaseAuth.PhoneAuthCredential()
+                //                    default:
+                //                        break
+                //                    }
+                //                }
             }
         }
     }
     
     @IBAction func handleEditCancel(_ sender: Any) {
-//        switchView(btn: nil)
+        //        switchView(btn: nil)
     }
-	
-	/// Called when 'return' key pressed
-   func textFieldShouldReturn(_ textField:UITextField) -> Bool {
-	   textField.resignFirstResponder()
-	   return true
-   }
-   
-   /// Called when the user clicks on the view outside of the UITextField
-   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-	   self.view.endEditing(true)
-   }
+    
+    /// Called when 'return' key pressed
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    /// Called when the user clicks on the view outside of the UITextField
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
 }

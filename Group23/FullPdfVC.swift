@@ -15,6 +15,7 @@ class FullPdfVC: UIViewController {
     var currentPDF: PDFDocument?
     var currentPDFFileName: String = ""
     var pdfIDInternal: Int = 0
+    var onDeleteCompletion: (() -> Void)!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +53,7 @@ class FullPdfVC: UIViewController {
                 filestToDelete.append(self.pdfIDInternal)
                 
                 // make request with server and delete file
-                deleteUserFiles(tempFileDeletionIDs: filestToDelete)
+                deleteUserFiles(tempFileDeletionIDs: filestToDelete, completion: self.onDeleteCompletion)
                 
                 // pop VC
                 self.navigationController?.popViewController(animated: true)

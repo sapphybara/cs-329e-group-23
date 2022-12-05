@@ -2,7 +2,7 @@
 //  HomeVC.swift
 //  Group23
 //
-//  Created by m1 on 06/10/2022.
+//  Created by Warren Wiser on 06/10/2022.
 //
 
 import UIKit
@@ -10,21 +10,6 @@ import PDFKit
 
 // global array for file deletion from UI to server side, uses file IDs from file naming schema within application
 var filestToDelete: [Int] = []
-
-// initializes welcome message when opening application
-func updateWelcomeMessage() -> String {
-    // Assign welcome message based on the user
-    activeUser = provideCurrentUser()
-    
-    var messageOut: String = ""
-    
-    if activeUser != "Anonymous" {
-        messageOut = "Welcome \(activeUser)!\nYour Files Will Automatically Sync 🔄"
-    } else {
-        messageOut = "Welcome \(activeUser) User!\nLogin Or Lose Your Data ⚠️🤖"
-    }
-    return messageOut
-}
 
 class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
@@ -43,64 +28,40 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         welcomeUser.text = updateWelcomeMessage()
         
         scansLabel.text = "Scan or Upload something to get started!"
-        //        // Add PDFView to view controller.
-        //        let pdfView = PDFView(frame: self.view.bounds)
-        //        pdfView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        //        self.view.addSubview(pdfView)
-        //
-        //        // Fit content in PDFView.
-        //        pdfView.autoScales = true
+    }
+    
+    func updateWelcomeMessage() -> String {
+        if let user = activeUser {
+            return "Welcome \(user.displayName ?? user.email!)!\nYour Files Will Automatically Sync 🔄"
+        }
+        return "Welcome Anonymous User!\nLogin Or Lose Your Data ⚠️🤖"
+    }
+    
+    // This function shows available data
+    func showData() {
+        if pdfStoredObjects.count != 0 {
+            scansLabel.text = "Here Are Your Available PDF Files"
+        }
+        self.collectionView.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        collectionView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         // checks for change in user login and also updates welcome message based on that application response
         welcomeUser.text = updateWelcomeMessage()
-        
-        // This function shows data
-        func showData() {
-            if pdfStoredObjects.count != 0{
-                scansLabel.text = "Here Are Your Available PDF Files"
-            }
-            print("number of scans \(pdfStoredObjects.count)")
-            //        print(listPDFThumbnails)
-            //        print(listPDFThumbnails.count)
-            
-            self.collectionView.reloadData()
-        }
-        
-        // Do these procedures against the server if the user is logged in
-        if activeUser != "Anonymous" {
-            if scanOrUpload == true && loadServerData == true {
-                // block says, if file has been scanned or uploaded, reload the server data (add data procedure)
-                
-                // This line retrieves server data in background
-                serverUserFilesDataRetrieval()
-                
-                print("\nTHROWING SERVER DATA TO HOMEVC, CASE 1\n")
-                
-                showData()
-                
+        if activeUser != nil {
+            if loadServerData {
+                print("Retrieving files")
+                // once a file is retrieved, add it to the collection view
+                serverUserFilesDataRetrieval(completion: showData)
                 scanOrUpload = false
                 loadServerData = false
-            } else if scanOrUpload == false && loadServerData == true {
-                // block says, if file has not been scanned or uploaded, and server data has not been loaded locally
-                // then load server data once with an array check to mitigate copies (start up procedure)
-                
-                // WARREN USE THIS BLANK SPACE FOR animation
-                
-                // This line retrieves server data in background
-                serverUserFilesDataRetrieval()
-                
-                print("\nTHROWING SERVER DATA TO HOMEVC, CASE 2\n")
-                
-                showData()
-                
-                loadServerData = false
             } else {
-                // block says, if file has not been scanned or uploaded, and server data has been loaded locally
-                // just show locally loaded data, not need to make a server request (navigation procedure)
-                
-                print("\nNO DATA HAS BEEN SCANNED, JUST DISPLAYING DATA\n")
+                print("Data has \(scanOrUpload ? "" : "not ")been scanned")
                 showData()
             }
         } else {
@@ -143,12 +104,10 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == segueID,
            let destination = segue.destination as? FullPdfVC,
-           let selectedIndex = collectionView.indexPathsForSelectedItems{
+           let selectedIndex = collectionView.indexPathsForSelectedItems {
             let finalIndexPathArray = Array(selectedIndex)
             let finalIndexPath = finalIndexPathArray.last
             let finalIndex = Int((finalIndexPath?.last!)!)
-//            print(finalIndex)
-            
             let pdfDocumentBundle = pdfStoredObjects[finalIndex]
             let pdfDocumentID = pdfDocumentBundle.1
             var pdfDocument: [PDFDocument] = []
@@ -160,6 +119,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             destination.currentPDF = pdfDocument[finalIndex]
             destination.currentPDFFileName = "File_\(pdfDocumentID).pdf"
             destination.pdfIDInternal = pdfDocumentID
+            destination.onDeleteCompletion = collectionView.reloadData
         }
     }
     

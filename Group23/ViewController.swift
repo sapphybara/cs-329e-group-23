@@ -2,10 +2,16 @@
 //  ViewController.swift
 //  Group23
 //
-//  Created by m1 on 11/10/2022.
+//  Created by Warren Wiser on 11/10/2022.
 //
 
 import UIKit
+import FirebaseAuth
+
+// global user variable to access user data bucket
+var activeUser: User? {
+    Auth.auth().currentUser
+}
 
 class ViewController: UITabBarController, UITabBarControllerDelegate {
     
