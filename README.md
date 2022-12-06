@@ -61,6 +61,10 @@ Work Distribution Table:
 | UI Design     | Overall design and aesthetic of the app, along with darkmode      | Warren 100% |
 | Settings | Allows users to change the settings of the app including profile settings and visual settings      | Warren 100% |
 | Firebase Storage     | Allows for the retrieval, upload (uniquely made and checked files), sycncing, and deleting of all user made data to a save location unique only to the user that is logged in. It also stores user profile images in a user save location separate from all user made files.  | Santiago 90%, Warren 10% |
+| File Deletion, it's UI, and Alert     | Allows users to delete data (both locally and on the server, depending on user login status) | Santiago 98%, Warren 2% |
+| Display PDF file in PDFview from cell     | Allows user to navigate the file in PDFview, and displays the file name. | Corey 95%, Santiago 5% |
+| Home View Controller Display     | Allows user see all available PDF files in a collection view and updates the the welcome message based on the logged-in status of the user, syncs data if user is logged in from the launch of the application. | Corey 80%, Santiago 10%, Warren 10% |
+
 
 
 ### References
