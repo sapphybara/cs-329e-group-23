@@ -26,16 +26,15 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         collectionView.dataSource = self
         
         welcomeUser.text = updateWelcomeMessage()
-        
         scansLabel.text = "Scan or Upload something to get started!"
     
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(recognizeSwipeGesture(recognizer:)))
         swipeLeft.direction = UISwipeGestureRecognizer.Direction.left
         self.view.addGestureRecognizer(swipeLeft)
     }
-    @IBAction func recognizeSwipeGesture(recognizer: UISwipeGestureRecognizer)
-    {
-        if recognizer.direction == .left{
+    
+    @IBAction func recognizeSwipeGesture(recognizer: UISwipeGestureRecognizer) {
+        if recognizer.direction == .left {
             print("swiped left")
             self.tabBarController?.selectedIndex += 1
         }
@@ -72,7 +71,6 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
                 scanOrUpload = false
                 loadServerData = false
             } else {
-                print("Data has \(scanOrUpload ? "" : "not ")been scanned")
                 showData()
             }
         } else {

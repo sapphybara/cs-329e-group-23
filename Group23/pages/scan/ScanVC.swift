@@ -269,8 +269,6 @@ extension ScanVC: PHPickerViewControllerDelegate {
                 item.loadObject(ofClass: UIImage.self) { (image, error) in
                     if let image = image as? UIImage {
                         UIImageArray.append(image)
-                        print("inner: \(UIImageArray)")
-                        
                         imageCounter += 1
                         if imageCounter == imagesLength {
                             self.makePDF(UIImageArray)
