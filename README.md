@@ -61,20 +61,26 @@ At least one of the following per team member:
 Work Distribution Table:  
 | Required Feature | Description                 | Who / Percentage worked on  |
 | ---------------- |-----------------------------| ------|
-| log in screen     | Allows users to both log in and create an account | Warren 96%, Santiago 4% |
-| UI Design     | Overall design and aesthetic of the app, along with darkmode      | Warren 100% |
-| Settings | Allows users to change the settings of the app including profile settings and visual settings      | Warren 100% |
-| Firebase Storage     | Allows for the retrieval, upload (uniquely made and checked files), sycncing, and deleting of all user made data to a save location unique only to the user that is logged in. It also stores user profile images in a user save location separate from all user made files.  | Santiago 90%, Warren 10% |
-| File Deletion, it's UI, and Alert     | Allows users to delete data (both locally and on the server, depending on user login status) | Santiago 98%, Warren 2% |
-| Display PDF file in PDFview from cell     | Allows user to navigate the file in PDFview, and displays the file name. | Corey 95%, Santiago 5% |
-| Home View Controller Display     | Allows user see all available PDF files in a collection view and updates the the welcome message based on the logged-in status of the user, syncs data if user is logged in from the launch of the application. | Corey 80%, Santiago 10%, Warren 10% |
-| Major Element: User Profile path using camera and photo library  | Allows user to change the profile image and sends it to a server save location | Warren 60%, Santiago 40% |
 | Major Element: Multithreading  | Allows multithreading for PDF display and it's thumbnails, for file deletion between local and server user uploaded files, maintains security over user-uploaded files, data retrieval implementation as well. | Warren 40%, Santiago 60% |
 | Minor Element: Segmented Controller  | Login/Signup Implementation | Warren 100% |
 | Minor Element: UIPickerController | Implementation within settings for user selected custom font. | Warren 100% |
 | Minor Element: ProgressView | Used for the animation for the loadscreen when launching the application. | Max 100% |
-| Minor Element: Collection View | Used for the display of all user-made PDF display. | Max 100% |
-
+| Minor Element: Collection View | Used for the display of all user-made PDF files (as thumbnails). | Corey 100% |
+| Minor Element: Alerts | Used when alerting a user that is deleting a file, used for when clicks on the help button, also implemented user settings and profile VC (if email is invalid and re-authentiction)  | Warren 60%, Santiago 20%, Corey 20% |
+| Minor Element: Stack Views | Used in profile page, when logged in, and when logged out. | Warren 100% |
+| Minor Element: Scroll Views | Used when you click on a PDF thumnnail and view it in PDFView | Corey 100% |
+| Minor Element: Scroll Views | Used in the profile settings, a switch was implemented to allow the user to get haptic/vibrational feedback from the application. | Corey 60%, Warren 40% |
+| Minor Element: Local Notification | Used to inform the user that their newly scanned PDFs are available when the user navigates out of the application after scanning/or uploading a new PDF file. | Max 99%, Santiago 1% |
+| Minor Element: Gesture Recognition | Used to allow swipe navigation to the different pages within the application. | Corey 100% |
+| Minor Element: Animation | Used to animate the progress of the Progress View when the application launches. | Max 100% |
+| Minor Element: Firebase Storage     | Allows for the retrieval, upload (uniquely made and checked files), sycncing, and deleting of all user made data to a save location unique only to the user that is logged in. It also stores user profile images in a user save location separate from all user made files.  | Santiago 90%, Warren 10% |
+| log in screen     | Allows users to both log in and create an account | Warren 96%, Santiago 4% |
+| UI Design     | Overall design and aesthetic of the app, along with darkmode      | Warren 100% |
+| Settings | Allows users to change the settings of the app including profile settings and visual settings      | Warren 100% |
+| File Deletion, it's UI, and Alert     | Allows users to delete data (both locally and on the server, depending on user login status) | Santiago 98%, Warren 2% |
+| Display PDF file in PDFview from cell     | Allows user to navigate the file in PDFview, and displays the file name. | Corey 95%, Santiago 5% |
+| Home View Controller Display     | Allows user see all available PDF files in a collection view and updates the the welcome message based on the logged-in status of the user, syncs data if user is logged in from the launch of the application. | Corey 80%, Santiago 10%, Warren 10% |
+| Major Element: User Profile path using camera and photo library  | Allows user to change the profile image and sends it to a server save location | Warren 60%, Santiago 40% |
 
 
 
