@@ -221,6 +221,7 @@ class UserSettingsProfileVC: UIViewController, UITextFieldDelegate, UIImagePicke
     
     // changes to/from edit mode
     func switchView() {
+        warningLabel.text = ""
         isUserEditingProfile = !isUserEditingProfile
         editButton.setImage(isUserEditingProfile ? saveImg : pencilImg, for: .normal)
         cancelEditButton.isHidden = !isUserEditingProfile
@@ -363,7 +364,6 @@ class UserSettingsProfileVC: UIViewController, UITextFieldDelegate, UIImagePicke
     // cancel any staged edits from text fields
     @IBAction func handleEditCancel(_ sender: Any) {
         switchView()
-        warningLabel.text = ""
     }
     
     // create & present an imagePicker of given type

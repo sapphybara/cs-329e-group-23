@@ -466,7 +466,7 @@
                                             <color key="baseForegroundColor" name="primary2"/>
                                         </buttonConfiguration>
                                         <connections>
-                                            <segue destination="u9b-wB-Wfk" kind="show" id="EXo-aK-D3s"/>
+                                            <segue destination="u9b-wB-Wfk" kind="presentation" id="EXo-aK-D3s"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A3f-aP-Bzr">
@@ -715,8 +715,8 @@
                                                         <color key="textColor" name="text-medium-emphasis"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Scan color type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yAV-8V-JrG">
-                                                        <rect key="frame" x="55.333333333333321" y="87.000000000000028" width="118.66666666666669" height="215.99999999999997"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Custom Font" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yAV-8V-JrG">
+                                                        <rect key="frame" x="76" y="87.000000000000028" width="98" height="215.99999999999997"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" name="text-medium-emphasis"/>
                                                         <nil key="highlightedColor"/>
@@ -777,23 +777,11 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G1k-vb-ekR">
-                                <rect key="frame" x="20" y="20" width="56" height="31"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Back">
-                                    <color key="baseForegroundColor" name="success2"/>
-                                </buttonConfiguration>
-                                <connections>
-                                    <segue destination="cW8-0y-r3P" kind="show" id="1q3-7b-9nw"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="pYJ-oO-7xE"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="G1k-vb-ekR" firstAttribute="leading" secondItem="pYJ-oO-7xE" secondAttribute="leading" constant="20" id="1Iy-yj-VN2"/>
                             <constraint firstItem="pYJ-oO-7xE" firstAttribute="trailing" secondItem="7Vo-g8-W1u" secondAttribute="trailing" constant="12" id="JGB-qi-sGH"/>
-                            <constraint firstItem="G1k-vb-ekR" firstAttribute="top" secondItem="pYJ-oO-7xE" secondAttribute="top" constant="20" id="M5O-PX-gK7"/>
                             <constraint firstItem="tX1-IK-Neb" firstAttribute="top" secondItem="pYJ-oO-7xE" secondAttribute="top" constant="100" id="Ueh-vm-Qgg"/>
                             <constraint firstItem="tX1-IK-Neb" firstAttribute="centerX" secondItem="DI5-Fe-ACe" secondAttribute="centerX" id="cLw-PB-3qp"/>
                             <constraint firstItem="7Vo-g8-W1u" firstAttribute="top" secondItem="tX1-IK-Neb" secondAttribute="bottom" constant="48" id="dhB-uh-NnD"/>
@@ -804,8 +792,8 @@
                     <navigationItem key="navigationItem" id="Tdd-cS-HAN"/>
                     <connections>
                         <outlet property="darkModeSwitch" destination="R5N-9A-gGp" id="oHN-Ow-1dX"/>
+                        <outlet property="fontPicker" destination="rd9-BP-4Ff" id="eJX-w6-xI6"/>
                         <outlet property="hapticsSwitch" destination="f7i-G6-YRv" id="3la-0e-KdD"/>
-                        <outlet property="scanColorPicker" destination="rd9-BP-4Ff" id="eJX-w6-xI6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h0a-Rr-uz9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -860,7 +848,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="1q3-7b-9nw"/>
         <segue reference="KQu-CS-FIc"/>
         <segue reference="nt6-ut-qMO"/>
     </inferredMetricsTieBreakers>

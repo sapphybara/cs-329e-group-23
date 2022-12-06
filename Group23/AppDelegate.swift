@@ -20,12 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        // working vals: Avenir, Helvetica, Baskerville, CopperPlate, Futura-Medium
 
-        // from same post as in FontExtenders
-        UILabel.appearance().substituteFontName = "Avenir"
-        UITextView.appearance().substituteFontName = "Avenir"
-        UITextField.appearance().substituteFontName = "Avenir"
+        // from same post as in FontExtenders.swift
+        UILabel.appearance().substituteFontName = customFontNames[0]
+        UITextView.appearance().substituteFontName = customFontNames[0]
+        UITextField.appearance().substituteFontName = customFontNames[0]
         return true
     }
 

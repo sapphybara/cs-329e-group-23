@@ -8,6 +8,8 @@
 import UIKit
 import FirebaseAuth
 
+let customFontNames = ["Avenir", "Baskerville", "CopperPlate", "Futura-Medium", "Helvetica"]
+
 // global user variable to access user data bucket
 var activeUser: User? {
     Auth.auth().currentUser
