@@ -60,7 +60,7 @@ Work Distribution Table:
 | log in screen     | Allows users to both log in and create an account | someone x% |
 | UI Design     | Overall design and aesthetic of the app, along with darkmode      | person x% |
 | Settings | Allows users to change the settings of the app including profile settings and visual settings      | person x% |
-| Firebase Storage     | Allows users to both log in and create an account | Santiago 90%\nWarren 10% |
+| Firebase Storage     | Allows for the retrieval, upload (uniquely made and checked files), sycncing, and deleting of all user made data to a save location unique only to the user that is logged in. It also stores user profile images in a user save location separate from all user made files.  | Santiago 90%, Warren 10% |
 
 ### References
 - Profile image: <a target="_blank" href="https://icons8.com/icon/23264/user">User</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
