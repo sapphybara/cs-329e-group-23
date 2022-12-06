@@ -52,6 +52,7 @@ At least one of the following per team member:
 - [ ] Core Location / MapKit
 - [ ] Core Audio
 - [ ] Others (such as QR code, Koloda, etc.) with approval from the instructor – list them
+- [x] Firebase Storage - For Retrieving, Syncing, Uploading, and Deleting All Created User Data
 
 Work Distribution Table:  
 | Required Feature | Description                 | Who / Percentage worked on  |
