@@ -83,7 +83,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     @IBAction func helpButtonPressed(_ sender: Any) {
         let controller = UIAlertController(
             title: "How to use our scanner!",
-            message: "There are 3 pages to note, Home, Scan, and Profile. \n\n Home Screen: Here you will see the pdfs you scan! \n\n Scan Screen: Here you will be able to scan a pdf with your camera or upload from photo library. \n\n Profile Screen: Here you will see info about yourself and change settings."
+            message: "There are 3 pages: Home, Scan, and Profile. \n\n Home Screen: Here you will see the PDFs you scan! \n\n Scan Screen: Here you will be able to scan a PDF with your camera or upload and make one from your photo library. \n\n Profile Screen: Here you will see info about yourself and change settings."
             ,
             preferredStyle: .alert)
         controller.addAction(UIAlertAction(
