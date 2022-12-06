@@ -10,10 +10,13 @@ Special Instructions:
 
 Required feature checklist:
 - [x] Login/register path with Firebase.  
-- [x] “Settings” screen. The three behaviors we implemented are:  
   - Change Username
   - Change Password
   - Change Profile Pic
+- [x] “Settings” screen. The three behaviors we implemented are:  
+  - Change Dark Mode
+  - Change Haptic
+  - Change Font
 - [x] Non-default fonts and colors used  
 
 Two major elements used:
@@ -26,7 +29,8 @@ Minor Elements used:
 - [x] Two additional view types such as sliders, segmented controllers, etc. The two we
 implemented are: 
   - Segmented controllers
-  - Scroll View
+  - UIPickerController
+  - ProgressView
 
 One of the following:
 - [ ] Table View
@@ -37,7 +41,7 @@ One of the following:
 Two of the following:
 - [x] Alerts
 - [ ] Popovers
-- [ ] Stack Views
+- [x] Stack Views
 - [x] Scroll Views
 - [x] Haptics
 - [ ] User Defaults
