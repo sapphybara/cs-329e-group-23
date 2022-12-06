@@ -6,6 +6,7 @@ Dependencies: Xcode 14, Swift 4
 
 Special Instructions:
 - Prioritize running the application on a physical phone (in portrait mode) to have camera access, if not possible use iPhone 13 Pro Max (in portrait mode) when building with simulator.
+- Don't forget to swipe between VC's, Gesture Recongition is implemented here.
 - Can create own account or use our test account, username: g@g.com password: beansbeans
 
 Required feature checklist:
