@@ -61,6 +61,7 @@ At least one of the following per team member:
 Work Distribution Table:  
 | Required Feature | Description                 | Who / Percentage worked on  |
 | ---------------- |-----------------------------| ------|
+| Major Element: User Profile path using camera and photo library  | Allows user to change the profile image and sends it to a server save location | Warren 60%, Santiago 40% |
 | Major Element: Multithreading  | Allows multithreading for PDF display and it's thumbnails, for file deletion between local and server user uploaded files, maintains security over user-uploaded files, data retrieval implementation as well. | Warren 40%, Santiago 60% |
 | Minor Element: Segmented Controller  | Login/Signup Implementation | Warren 100% |
 | Minor Element: UIPickerController | Implementation within settings for user selected custom font. | Warren 100% |
@@ -80,7 +81,6 @@ Work Distribution Table:
 | File Deletion, it's UI, and Alert     | Allows users to delete data (both locally and on the server, depending on user login status) | Santiago 98%, Warren 2% |
 | Display PDF file in PDFview from cell     | Allows user to navigate the file in PDFview, and displays the file name. | Corey 95%, Santiago 5% |
 | Home View Controller Display     | Allows user see all available PDF files in a collection view and updates the the welcome message based on the logged-in status of the user, syncs data if user is logged in from the launch of the application. | Corey 80%, Santiago 10%, Warren 10% |
-| Major Element: User Profile path using camera and photo library  | Allows user to change the profile image and sends it to a server save location | Warren 60%, Santiago 40% |
 
 
 
