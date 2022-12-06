@@ -68,10 +68,6 @@ func serverUserFilesDataRetrieval(completion: @escaping () -> Void) {
                             if let pdfFileOut = pdfFileItem {
                                 // pdf tuple array for file management on UI and server side
                                 pdfStoredObjects.append((pdfFileOut, tempFileID))
-                                if allowHaptics{
-                                    let generator = UINotificationFeedbackGenerator()
-                                    generator.notificationOccurred(.success)
-                                }
                                 
                                 // regenerate all thumbnails once the data is loaded in
                                 var tempList: [PDFDocument] = []
@@ -93,6 +89,10 @@ func serverUserFilesDataRetrieval(completion: @escaping () -> Void) {
     } else {
         print("\nUser Is Anonymous, No Data To Get From Server DB...")
         completion()
+    }
+    if allowHaptics{
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
     }
 }
 
