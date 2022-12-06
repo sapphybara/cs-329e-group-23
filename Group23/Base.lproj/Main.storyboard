@@ -266,7 +266,7 @@
                                 </connections>
                             </segmentedControl>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="pGe-z5-T8l" userLabel="parent">
-                                <rect key="frame" x="6" y="221" width="416" height="320"/>
+                                <rect key="frame" x="6" y="251" width="416" height="320"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="85" translatesAutoresizingMaskIntoConstraints="NO" id="Xru-ez-IZr" userLabel="labels">
                                         <rect key="frame" x="0.0" y="0.0" width="146.66666666666666" height="320"/>
@@ -335,7 +335,7 @@
                                 </userDefinedRuntimeAttributes>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rr6-Qg-Pyq">
-                                <rect key="frame" x="139" y="605" width="150" height="31"/>
+                                <rect key="frame" x="139" y="635" width="150" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="Vj7-8T-Eyp"/>
                                 </constraints>
@@ -348,15 +348,15 @@
                                     <action selector="handleAuthAttempt:" destination="roE-X7-scL" eventType="touchUpInside" id="2GL-2g-oko"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please log in to access your profile" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2g0-6z-Mhh">
-                                <rect key="frame" x="20" y="95" width="388" height="30"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please log in to access your profile and app settings" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2g0-6z-Mhh">
+                                <rect key="frame" x="20" y="95" width="388" height="60"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
                                 <color key="textColor" name="text-high-emphasis"/>
                                 <nil key="highlightedColor"/>
                                 <size key="shadowOffset" width="0.0" height="0.0"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Vf-iW-q4b">
-                                <rect key="frame" x="12" y="700" width="404" height="0.0"/>
+                                <rect key="frame" x="12" y="730" width="404" height="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" name="error1"/>
                                 <nil key="highlightedColor"/>
@@ -848,6 +848,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="60M-DB-36M"/>
         <segue reference="KQu-CS-FIc"/>
         <segue reference="nt6-ut-qMO"/>
     </inferredMetricsTieBreakers>
