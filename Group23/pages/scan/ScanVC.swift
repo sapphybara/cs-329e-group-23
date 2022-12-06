@@ -183,6 +183,8 @@ class ScanVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+		
+		self.requestPermission()
         
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(recognizeSwipeGesture(recognizer:)))
         swipeLeft.direction = UISwipeGestureRecognizer.Direction.left
@@ -202,6 +204,44 @@ class ScanVC: UIViewController {
             self.tabBarController?.selectedIndex -= 1
         }
     }
+	
+	// MARK: - Local Push Notification
+	func scheduleNotification() {
+		
+		// create content
+		let content = UNMutableNotificationContent()
+		content.title = "PDEffIt"
+		content.subtitle = "Come Back!"
+		content.sound = UNNotificationSound.default
+		content.body = "You haven't been back in a while, come check it out!"
+		
+		// create trigger - create DateComponents onject for 1 day from now
+		let nextTriggerDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+		let comps = Calendar.current.dateComponents([.year, .month, .day], from: nextTriggerDate)
+		let date_trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
+//		print("date_trigger.nextTriggerDate(): \(String(describing: date_trigger.nextTriggerDate()))")
+		
+		let demo_trigger = UNTimeIntervalNotificationTrigger(timeInterval: 30, repeats: false)
+		
+		// combine it all into a request
+		let request = UNNotificationRequest(identifier: "myNotification", content: content, trigger: date_trigger)
+		
+		let demo_request = UNNotificationRequest(identifier: "myNotification", content: content, trigger: demo_trigger)
+		
+		// Disabled for demo/grading purposes, uncomment line 1 and comment line 2 for normal functionality
+//		UNUserNotificationCenter.current().add(request)
+		UNUserNotificationCenter.current().add(demo_request)
+	}
+	
+	func requestPermission() {
+		UNUserNotificationCenter.current().requestAuthorization(options:[.alert,.badge,.sound]) {
+			granted, error in
+			if !granted, 
+			let error = error {
+				print(error.localizedDescription)
+			}
+		}
+	}
     
     // MARK: - Library Upload
     @IBAction func libraryButtonPressed(_ sender: UIButton) {
@@ -230,26 +270,6 @@ class ScanVC: UIViewController {
         configureDocumentScanView()
     }
     
-    func imageArrayToDataArray(UIImagesArray: [UIImage]) -> [Data] {
-        var imageDataArray = [Data]()
-        UIImagesArray.forEach({ (image) in
-            if let thisImageData: Data = image.jpegData(compressionQuality: 1) {
-                imageDataArray.append(thisImageData)
-            }
-        })
-        return imageDataArray
-    }
-    
-    func imageDataArrayToImageArray(imageDataArray: [Data]) -> [UIImage] {
-        var UIImageArray = [UIImage]()
-        imageDataArray.forEach({ (imageData) in
-            if let thisUIImage: UIImage = UIImage(data: imageData) {
-                UIImageArray.append(thisUIImage)
-            }
-        })
-        return UIImageArray
-    }
-    
     private func configureDocumentScanView() {
         let documentViewVC = VNDocumentCameraViewController()
         documentViewVC.delegate = self
@@ -271,6 +291,7 @@ extension ScanVC: PHPickerViewControllerDelegate {
                         UIImageArray.append(image)
                         imageCounter += 1
                         if imageCounter == imagesLength {
+							self.scheduleNotification()
                             self.makePDF(UIImageArray)
                         }
                     }
