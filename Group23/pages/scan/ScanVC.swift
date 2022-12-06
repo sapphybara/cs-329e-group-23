@@ -211,9 +211,9 @@ class ScanVC: UIViewController {
 		// create content
 		let content = UNMutableNotificationContent()
 		content.title = "PDEffIt"
-		content.subtitle = "Come Back!"
+		content.subtitle = "Your PDFs Miss You!"
 		content.sound = UNNotificationSound.default
-		content.body = "You haven't been back in a while, come check it out!"
+		content.body = "Check Out Your Available PDFs, You Just Uploaded A New File!"
 		
 		// create trigger - create DateComponents onject for 1 day from now
 		let nextTriggerDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
@@ -221,7 +221,7 @@ class ScanVC: UIViewController {
 		let date_trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
 //		print("date_trigger.nextTriggerDate(): \(String(describing: date_trigger.nextTriggerDate()))")
 		
-		let demo_trigger = UNTimeIntervalNotificationTrigger(timeInterval: 30, repeats: false)
+		let demo_trigger = UNTimeIntervalNotificationTrigger(timeInterval: 8, repeats: false)
 		
 		// combine it all into a request
 		let request = UNNotificationRequest(identifier: "myNotification", content: content, trigger: date_trigger)
