@@ -43,7 +43,7 @@ Two of the following:
 - [ ] User Defaults
 
 At least one of the following per team member:
-- [ ] Local notifications
+- [x] Local notifications
 - [ ] Core Graphics
 - [x] Gesture Recognition
 - [ ] Animation
@@ -60,6 +60,7 @@ Work Distribution Table:
 | log in screen     | Allows users to both log in and create an account | someone x% |
 | UI Design     | Overall design and aesthetic of the app, along with darkmode      | person x% |
 | Settings | Allows users to change the settings of the app including profile settings and visual settings      | person x% |
+| Firebase Storage     | Allows users to both log in and create an account | Santiago 90%\nWarren 10% |
 
 ### References
 - Profile image: <a target="_blank" href="https://icons8.com/icon/23264/user">User</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
