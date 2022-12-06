@@ -31,6 +31,7 @@ extension ScanVC: VNDocumentCameraViewControllerDelegate {
             return
         }
         
+		self.scheduleNotification()
         // Multithreading for PDF Scan Where Number Of Scans >= 1
         DispatchQueue.main.async {
             var pdfDocIDExternal: Int
