@@ -44,8 +44,8 @@ Two of the following:
 
 At least one of the following per team member:
 - [ ] Local notifications
-- [x] Core Graphics
-- [ ] Gesture Recognition
+- [ ] Core Graphics
+- [x] Gesture Recognition
 - [ ] Animation
 - [ ] Calendar
 - [ ] Core Motion
