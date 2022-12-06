@@ -28,15 +28,15 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-		emailField.delegate = self
-		passwordField.delegate = self
-		confirmPasswordField.delegate = self
+        emailField.delegate = self
+        passwordField.delegate = self
+        confirmPasswordField.delegate = self
         showLoginScreen()
-
+        
         Auth.auth().addStateDidChangeListener() { auth, user in
             if user != nil {
                 self.performSegue(withIdentifier: self.successSegue, sender: nil)
-
+                
                 // reset the login screen to default to prepare for possible logout
                 self.emailField.text = nil
                 self.passwordField.text = nil
@@ -53,7 +53,6 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     @IBAction func recognizeSwipeGesture(recognizer: UISwipeGestureRecognizer)
     {
         if recognizer.direction == .right{
-            print("swiped right")
             self.tabBarController?.selectedIndex -= 1
         }
     }
@@ -116,16 +115,16 @@ class LoginVC: UIViewController, UITextFieldDelegate {
             self.statusLabel.text = ""
         }
     }
-	
-	/// Called when 'return' key pressed
-	func textFieldShouldReturn(_ textField:UITextField) -> Bool {
-		textField.resignFirstResponder()
-		return true
-	}
-	
-	/// Called when the user clicks on the view outside of the UITextField
-	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-		self.view.endEditing(true)
-	}
+    
+    /// Called when 'return' key pressed
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    /// Called when the user clicks on the view outside of the UITextField
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     
 }

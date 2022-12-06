@@ -61,15 +61,11 @@ func serverFileUserImageRetrieval(completion: @escaping () -> Void) {
                             completion()
                         }
                     }
-                } else {
-                    print("no profile picture for \(user.email!)")
                 }
             } catch {
                 print("Error retrieving profile pic: \(error.localizedDescription)")
             }
         }
-    } else {
-        print("user not found, unable to retrieve profile image")
     }
 }
 
@@ -102,8 +98,6 @@ func serverFileUserImageDeletion(profilePickReference: UIImageView) {
                 // sync deleted server user profile image objects with locally stored objects in memory
                 profileImageDataStructure = []
             }
-        } else {
-            print("Cannot access an anonymous user's image")
         }
     }
 }
@@ -177,7 +171,6 @@ class UserSettingsProfileVC: UIViewController, UITextFieldDelegate, UIImagePicke
     @IBAction func recognizeSwipeGesture(recognizer: UISwipeGestureRecognizer)
     {
         if recognizer.direction == .right{
-            print("swiped right")
             self.tabBarController?.selectedIndex -= 1
         }
     }
@@ -301,8 +294,6 @@ class UserSettingsProfileVC: UIViewController, UITextFieldDelegate, UIImagePicke
                         }
                         if let pwInput = self.inputStack.arrangedSubviews.last as? UITextField {
                             pwInput.text = ""
-                        } else {
-                            print("failed resetting pw field")
                         }
                     }
                 }

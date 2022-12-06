@@ -31,7 +31,7 @@ extension ScanVC: VNDocumentCameraViewControllerDelegate {
             return
         }
         
-		self.scheduleNotification()
+        self.scheduleNotification()
         // Multithreading for PDF Scan Where Number Of Scans >= 1
         DispatchQueue.main.async {
             var pdfDocIDExternal: Int
@@ -50,12 +50,10 @@ extension ScanVC: VNDocumentCameraViewControllerDelegate {
                 
                 if idArray.contains(pdfDocID) {
                     while idArray.contains(pdfDocID) {
-                        print("\nID \(pdfDocID) Is Already In Use, Generating New PDF File ID\n")
                         pdfDocID = Int.random(in: 0..<100000)
                     }
                 }
                 
-                print("\nNew PDF Document Has An ID of \(pdfDocID)")
                 return pdfDocID
             }
             
@@ -64,7 +62,6 @@ extension ScanVC: VNDocumentCameraViewControllerDelegate {
             
             for pageNum in 0..<scan.pageCount {
                 let image: UIImage = scan.imageOfPage(at: pageNum)
-                print("image: \(image)") // for debug only
                 
                 let pdfPage = PDFPage(image: image)
                 pdfDocumentInstance.insert(pdfPage!, at: pageNum)
@@ -88,7 +85,6 @@ extension ScanVC: VNDocumentCameraViewControllerDelegate {
             listPDFThumbnails.append(((generatePDFThumbnail(currentpdf: tempList.last!)), pdfDocIDExternal))
             
             self.dismiss(animated: true)
-            print("\n\nMESAGE:\nImage Has Been Scanned, Number of scans: \(pdfStoredObjects.count)\n\n")
             // switches required to keep track of loading data to HomeVC
             if activeUser != nil {
                 scanOrUpload = true

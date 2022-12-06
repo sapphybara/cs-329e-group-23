@@ -27,7 +27,7 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         
         welcomeUser.text = updateWelcomeMessage()
         scansLabel.text = "Scan or Upload something to get started!"
-    
+        
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(recognizeSwipeGesture(recognizer:)))
         swipeLeft.direction = UISwipeGestureRecognizer.Direction.left
         self.view.addGestureRecognizer(swipeLeft)
@@ -35,14 +35,13 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     
     @IBAction func recognizeSwipeGesture(recognizer: UISwipeGestureRecognizer) {
         if recognizer.direction == .left {
-            print("swiped left")
             self.tabBarController?.selectedIndex += 1
         }
     }
     
     func updateWelcomeMessage() -> String {
         if let user = activeUser {
-            return "Welcome \(user.displayName ?? user.email!)!\nYour Files Will Automatically Sync 🔄"
+            return "Welcome \(user.email!)!\nYour Files Will Automatically Sync 🔄"
         }
         return "Welcome Anonymous User!\nLogin Or Lose Your Data ⚠️🤖"
     }
@@ -106,7 +105,6 @@ class HomeVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("picked pdf \(indexPath.item)")
         if allowHaptics{
             let generator = UIImpactFeedbackGenerator(style: .light)
             generator.impactOccurred()

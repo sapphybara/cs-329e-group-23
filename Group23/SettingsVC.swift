@@ -42,12 +42,10 @@ class SettingsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     @IBAction func handleHapticsSwitch(_ sender: Any) {
         if (hapticsSwitch.isOn == true){
             allowHaptics = true
-            print("Haptics now enabled")
             let generator = UIImpactFeedbackGenerator(style: .medium)
             generator.impactOccurred()
         } else {
             allowHaptics = false
-            print("Haptics now disabled")
         }
     }
     

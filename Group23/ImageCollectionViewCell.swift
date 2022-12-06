@@ -8,6 +8,6 @@
 import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
-	@IBOutlet weak var cellImageView: UIImageView! // must be connected to UIImageView
-	
+    @IBOutlet weak var cellImageView: UIImageView! // must be connected to UIImageView
+    
 }

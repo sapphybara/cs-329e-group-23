@@ -9,7 +9,7 @@ import UIKit
 import PDFKit
 
 class FullPdfVC: UIViewController {
-
+    
     @IBOutlet weak var uiInteraction: UINavigationItem!
     
     var currentPDF: PDFDocument?
@@ -23,10 +23,10 @@ class FullPdfVC: UIViewController {
         let pdfView = PDFView(frame: self.view.bounds)
         pdfView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.view.addSubview(pdfView)
-
+        
         // Fit content in PDFView.
         pdfView.autoScales = true
-
+        
         pdfView.document = currentPDF
         //pdfView.contentMode
         

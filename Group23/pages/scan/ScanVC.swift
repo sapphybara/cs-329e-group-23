@@ -108,7 +108,6 @@ func deleteUserFiles(tempFileDeletionIDs: [Int], completion: @escaping () -> Voi
             let dbUserFilesRef = storageRef.child("userFiles/\(user.email!)")
             // server bucket reference for user data
             
-            
             // get objects to delete from application
             for pdfStoredObject in pdfStoredObjects {
                 if tempFileDeletionIDs.contains(pdfStoredObject.1) {
@@ -183,8 +182,8 @@ class ScanVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-		
-		self.requestPermission()
+        
+        self.requestPermission()
         
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(recognizeSwipeGesture(recognizer:)))
         swipeLeft.direction = UISwipeGestureRecognizer.Direction.left
@@ -196,52 +195,49 @@ class ScanVC: UIViewController {
     @IBAction func recognizeSwipeGesture(recognizer: UISwipeGestureRecognizer)
     {
         if recognizer.direction == .left{
-            print("swiped left")
             self.tabBarController?.selectedIndex += 1
         }
         if recognizer.direction == .right{
-            print("swiped right")
             self.tabBarController?.selectedIndex -= 1
         }
     }
-	
-	// MARK: - Local Push Notification
-	func scheduleNotification() {
-		
-		// create content
-		let content = UNMutableNotificationContent()
-		content.title = "PDEffIt"
-		content.subtitle = "Your PDFs Miss You!"
-		content.sound = UNNotificationSound.default
-		content.body = "Check Out Your Available PDFs, You Just Uploaded A New File!"
-		
-		// create trigger - create DateComponents onject for 1 day from now
-		let nextTriggerDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
-		let comps = Calendar.current.dateComponents([.year, .month, .day], from: nextTriggerDate)
-		let date_trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
-//		print("date_trigger.nextTriggerDate(): \(String(describing: date_trigger.nextTriggerDate()))")
-		
-		let demo_trigger = UNTimeIntervalNotificationTrigger(timeInterval: 8, repeats: false)
-		
-		// combine it all into a request
-		let request = UNNotificationRequest(identifier: "myNotification", content: content, trigger: date_trigger)
-		
-		let demo_request = UNNotificationRequest(identifier: "myNotification", content: content, trigger: demo_trigger)
-		
-		// Disabled for demo/grading purposes, uncomment line 1 and comment line 2 for normal functionality
-//		UNUserNotificationCenter.current().add(request)
-		UNUserNotificationCenter.current().add(demo_request)
-	}
-	
-	func requestPermission() {
-		UNUserNotificationCenter.current().requestAuthorization(options:[.alert,.badge,.sound]) {
-			granted, error in
-			if !granted, 
-			let error = error {
-				print(error.localizedDescription)
-			}
-		}
-	}
+    
+    // MARK: - Local Push Notification
+    func scheduleNotification() {
+        
+        // create content
+        let content = UNMutableNotificationContent()
+        content.title = "PDEffIt"
+        content.subtitle = "Your PDFs Miss You!"
+        content.sound = UNNotificationSound.default
+        content.body = "Check Out Your Available PDFs, You Just Uploaded A New File!"
+        
+        // create trigger - create DateComponents onject for 1 day from now
+        let nextTriggerDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+        let comps = Calendar.current.dateComponents([.year, .month, .day], from: nextTriggerDate)
+        let date_trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
+        
+        let demo_trigger = UNTimeIntervalNotificationTrigger(timeInterval: 8, repeats: false)
+        
+        // combine it all into a request
+        let request = UNNotificationRequest(identifier: "myNotification", content: content, trigger: date_trigger)
+        
+        let demo_request = UNNotificationRequest(identifier: "myNotification", content: content, trigger: demo_trigger)
+        
+        // Disabled for demo/grading purposes, uncomment line 1 and comment line 2 for normal functionality
+        //		UNUserNotificationCenter.current().add(request)
+        UNUserNotificationCenter.current().add(demo_request)
+    }
+    
+    func requestPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options:[.alert,.badge,.sound]) {
+            granted, error in
+            if !granted, 
+                let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
     
     // MARK: - Library Upload
     @IBAction func libraryButtonPressed(_ sender: UIButton) {
@@ -251,8 +247,6 @@ class ScanVC: UIViewController {
     private func showPicker() {
         var configuration = PHPickerConfiguration(photoLibrary: .shared())
         
-        // Set the filter type according to the user’s selection.
-        //        configuration.filter = .all(of: [.images])
         // Set the mode to avoid transcoding, if possible, if your app supports arbitrary image/video encodings.
         configuration.preferredAssetRepresentationMode = .current
         // Set the selection behavior to respect the user’s selection order.
@@ -291,7 +285,7 @@ extension ScanVC: PHPickerViewControllerDelegate {
                         UIImageArray.append(image)
                         imageCounter += 1
                         if imageCounter == imagesLength {
-							self.scheduleNotification()
+                            self.scheduleNotification()
                             self.makePDF(UIImageArray)
                         }
                     }
@@ -319,12 +313,10 @@ extension ScanVC: PHPickerViewControllerDelegate {
                 
                 if idArray.contains(pdfDocID) {
                     while idArray.contains(pdfDocID) {
-                        print("\nID \(pdfDocID) Is Already In Use, Generating New PDF File ID\n")
                         pdfDocID = Int.random(in: 0..<100000)
                     }
                 }
                 
-                print("\nNew PDF Document Has An ID of \(pdfDocID)")
                 return pdfDocID
             }
             
@@ -333,7 +325,6 @@ extension ScanVC: PHPickerViewControllerDelegate {
             
             for pageNum in 0..<UIImages.count {
                 let image: UIImage = UIImages[pageNum]
-                print("image: \(image)") // for debug only
                 
                 let pdfPage = PDFPage(image: image)
                 pdfDocumentInstance.insert(pdfPage!, at: pageNum)
