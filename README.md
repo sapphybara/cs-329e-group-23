@@ -5,7 +5,7 @@ Team Members: Max Kretschmer, Warren Wiser, Santiago Leyva, Corey Zhang
 Dependencies: Xcode 14, Swift 4  
 
 Special Instructions:
-- Use iPhone 13 Pro Max when building with simulator, or run on phone to have camera access
+- Prioritize running the application on a physical phone (in portrait mode) to have camera access, if not possible use iPhone 13 Pro Max (in portrait mode) when building with simulator.
 - Can create own account or use our test account, username: g@g.com password: beansbeans
 
 Required feature checklist:
