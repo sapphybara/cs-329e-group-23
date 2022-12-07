@@ -1,7 +1,7 @@
 # cs-329e-group-23
 
 ### Name Of Project: PDEffIt
-Team Members: Max Kretschmer, Warren Wiser, Santiago Leyva, Corey Zhang
+Team Members: [Warren Wiser](https://github.com/wswiser101), [Santiago Leyva](https://github.com/TheRealAntiVirus), [Corey Zhang](https://github.com/slamjamkablam), [Max Kretschmer](https://github.com/MaxKret)
 Dependencies: Xcode 14, Swift 5
 
 #### Special Instructions:
