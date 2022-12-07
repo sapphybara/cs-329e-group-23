@@ -86,7 +86,7 @@ Work Distribution Table:
 | Retrieving images from camera and photo roll, and automatic page scanning and detection, and related VCs | Allows user to automatically detect a page with their camera, and allows for the image(s) to have a filter as well, and allows the user to upload an image from their camera view to be converted into a PDF file.      | Max 100% |
 | File data management within application | Management of user-made data for the entire application (data structure setup, PDF conversions, and conversion of bytes from server to local application data to a usable format) for front end and UI side.     | Santiago 100% |
 
-### References
+### Referenced Media
 - Default profile image: <a target="_blank" href="https://icons8.com/icon/23264/user">User</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 - Scanner image: [Scanner](https://thenounproject.com/icon/scanner-1036158/) by Creative Mania on the [Noun Project](https://thenounproject.com/)
 - Color Pallete: derived from [BlueprintJS](https://blueprintjs.com/docs/#blueprint), a UI toolkit for developing web applications with React. Entire pallete [here](https://github.com/palantir/blueprint/blob/develop/packages/colors/src/_colors.scss).
