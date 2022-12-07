@@ -1,9 +1,8 @@
 # cs-329e-group-23
 
 ### Name Of Project: PDEffIt
-Team Members: [Warren Wiser](https://github.com/wswiser101), [Santiago Leyva](https://github.com/TheRealAntiVirus), [Corey Zhang](https://github.com/slamjamkablam), [Max Kretschmer](https://github.com/MaxKret)
-
-Dependencies: Xcode 14, Swift 5
+- Team Members: [Warren Wiser](https://github.com/wswiser101), [Santiago Leyva](https://github.com/TheRealAntiVirus), [Corey Zhang](https://github.com/slamjamkablam), [Max Kretschmer](https://github.com/MaxKret)
+- Dependencies: Xcode 14, Swift 5
 
 #### Special Instructions:
 - Prioritize running the application on a physical phone (in portrait mode) to have camera access, if not possible use iPhone 13 Pro Max (in portrait mode) when building with simulator.
