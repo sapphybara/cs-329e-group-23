@@ -4,12 +4,12 @@
 Team Members: Max Kretschmer, Warren Wiser, Santiago Leyva, Corey Zhang
 Dependencies: Xcode 14, Swift 5
 
-Special Instructions:
+#### Special Instructions:
 - Prioritize running the application on a physical phone (in portrait mode) to have camera access, if not possible use iPhone 13 Pro Max (in portrait mode) when building with simulator.
 - Don't forget to swipe between VC's, Gesture Recongition is implemented here.
 - Can create own account or use our test account, username: g<span>@</span>g.com password: beansbeans
 
-Required feature checklist:
+#### Required feature checklist:
 - [x] Login/register path with Firebase.  
   - Change Username
   - Change Password
@@ -20,26 +20,26 @@ Required feature checklist:
   - Change Font
 - [x] Non-default fonts and colors used  
 
-Two major elements used:
+#### Two major elements used:
 - [ ] Core Data
 - [x] User Profile path using camera and photo library
 - [x] Multithreading
 - [ ] SwiftUI  
 
-Minor Elements used:
+#### Minor Elements used:
 - [x] Two additional view types such as sliders, segmented controllers, etc. The two we
 implemented are:
   - Segmented controllers
   - UIPickerController
   - ProgressView
 
-One of the following:
+#### One of the following:
 - [ ] Table View
 - [x] Collection View
 - [x] Tab VC
 - [ ] Page VC
 
-Two of the following:
+#### Two of the following:
 - [x] Alerts
 - [ ] Popovers
 - [x] Stack Views
@@ -47,7 +47,7 @@ Two of the following:
 - [x] Haptics
 - [ ] User Defaults
 
-At least one of the following per team member:
+#### At least one of the following per team member:
 - [x] Local notifications
 - [ ] Core Graphics
 - [x] Gesture Recognition
@@ -59,7 +59,7 @@ At least one of the following per team member:
 - [x] Others (such as QR code, Koloda, etc.) with approval from the instructor – list them
   - [x] Firebase Storage - For Retrieving, Syncing, Uploading, and Deleting All Created User Data
 
-Work Distribution Table:  
+#### Work Distribution Table:  
 | Required Feature | Description                 | Who / Percentage worked on  |
 | ---------------- |-----------------------------| ------|
 | Major Element: User Profile path using camera and photo library  | Allows user to change the profile image and sends it to a server save location | Warren 60%, Santiago 40% |
