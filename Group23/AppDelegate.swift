@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Group23
 //
-//  Created by m1 on 06/10/2022.
+//  Created by Warren Wiser on 06/10/2022.
 //
 
 import UIKit
@@ -11,12 +11,20 @@ import FirebaseCore
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
+    
+    // Below Is Needed Due to Application Launch Bug - SL
+    override init() {
+        super.init()
+        FirebaseApp.configure() // For Firebase Setup
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        FirebaseApp.configure() // For Firebase Setup
+
+        // from same post as in FontExtenders.swift
+        UILabel.appearance().substituteFontName = customFontNames[0]
+        UITextView.appearance().substituteFontName = customFontNames[0]
+        UITextField.appearance().substituteFontName = customFontNames[0]
         return true
     }
 
