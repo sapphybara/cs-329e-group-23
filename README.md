@@ -1,7 +1,10 @@
 # cs-329e-group-23
 
+**This software does and will not have a license, it is the property of the [team members](#team) listed below.**
+---
+
 ### Name Of Project: PDEffIt
-- Team Members: [Warren Wiser](https://github.com/wswiser101), [Santiago Leyva](https://github.com/TheRealAntiVirus), [Corey Zhang](https://github.com/slamjamkablam), [Max Kretschmer](https://github.com/MaxKret)
+- <a id="team" />Team Members: [Warren Wiser](https://github.com/wswiser101), [Santiago Leyva](https://github.com/TheRealAntiVirus), [Corey Zhang](https://github.com/slamjamkablam), [Max Kretschmer](https://github.com/MaxKret)
 - Dependencies: Xcode 14, Swift 5
 
 #### Special Instructions:
